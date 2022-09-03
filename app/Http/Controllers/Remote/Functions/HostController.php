@@ -140,7 +140,7 @@ class HostController extends Controller
             $egg = WingsNestEgg::where('egg_id', $request->egg_id)->firstOrFail();
 
             $request_only['docker_image'] = $egg->docker_image;
-            $request_only['egg_id'] = $egg->id;
+            $request_only['egg_id'] = $egg->egg_id;
 
             $egg->environment = json_decode($egg->environment);
             $startup['environment'] = [];
