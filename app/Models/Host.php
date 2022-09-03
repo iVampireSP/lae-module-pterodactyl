@@ -63,7 +63,7 @@ class Host extends Model
 
     public function egg()
     {
-        return $this->belongsTo(WingsNestEgg::class);
+        return $this->belongsTo(WingsNestEgg::class, 'egg_id', 'egg_id');
     }
 
     // workOrders

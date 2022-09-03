@@ -84,7 +84,7 @@ class ServerJob implements ShouldQueue
                 $data['user'] = $user_id;
 
                 // 检查 egg_id 是否存在
-                $egg = WingsNestEgg::find($data['egg']);
+                $egg = WingsNestEgg::where('egg_id', $data['egg'])->first();
                 if (is_null($egg)) {
                     $this->http->patch('/tasks/' . $task_id, [
                         'title' => '找不到对应的 Egg, 我们将撤销更改。',

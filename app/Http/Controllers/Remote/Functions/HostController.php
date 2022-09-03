@@ -17,7 +17,7 @@ class HostController extends Controller
     public function index()
     {
         $hosts = Host::thisUser()->with('egg', function ($query) {
-            $query->select(['id', 'name']);
+            $query->select(['egg_id', 'name']);
         })->get();
         return $this->success($hosts);
     }
@@ -49,14 +49,14 @@ class HostController extends Controller
 
         $host_id = $host['data']['id'];
 
-        $egg = WingsNestEgg::findOrFail($request->egg_id);
+        $egg = WingsNestEgg::where('egg_id', $request->egg_id)->firstOrFail();
         $nest_id = $egg->nest_id;
 
         $server_data = [
             'name' => $request->name,
             // 'user' => $user['id'],
             'nest' => $nest_id,
-            'egg' => $request->egg_id,
+            'egg' => $egg->egg_id,
             'docker_image' => $egg->docker_image,
             'startup' => $egg->startup,
             'oom_disabled' => false,
