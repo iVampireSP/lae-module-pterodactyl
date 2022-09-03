@@ -17,6 +17,11 @@ class HostController extends Controller
 
         switch ($request->status) {
             case 'running':
+
+                if ($host->status == 'running') {
+                    return;
+                }
+
                 $this->http->post('/tasks', [
                     'title' => '正在解除暂停。',
                     'host_id' => $host->host_id,
@@ -40,6 +45,10 @@ class HostController extends Controller
                 // 执行暂停操作，然后标记为暂停状态
 
                 // 检测是不是平台调用
+
+                if ($host->status == 'suspended') {
+                    return;
+                }
 
                 $host->update($request->all());
 
