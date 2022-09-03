@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Jobs\RefreshNestJob;
 use App\Http\Controllers\JobController;
+use App\Jobs\CheckNode;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -21,6 +22,8 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             dispatch(new RefreshNestJob());
         })->hourly()->name('Wings');
+
+        $schedule->job(new CheckNode())->everyMinute()->name('CheckNode');
 
     }
 

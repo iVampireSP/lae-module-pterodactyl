@@ -54,9 +54,9 @@ class PanelController extends Controller
     }
 
     // Nodes
-    public function nodes($cache = true)
+    public function nodes()
     {
-        return $this->get('/nodes');
+        return $this->get('/nodes?include=location');
     }
 
     public function node($id, $cache = true)
