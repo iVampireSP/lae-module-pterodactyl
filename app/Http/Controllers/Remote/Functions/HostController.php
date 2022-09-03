@@ -123,6 +123,14 @@ class HostController extends Controller
         $update['memory'] = $server['attributes']['limits']['memory'];
         $update['cpu'] = $server['attributes']['limits']['cpu'];
         $update['io'] = $server['attributes']['limits']['io'];
+        $update['disk'] = $server['attributes']['limits']['disk'];
+
+        $update['feature_limits']['allocations'] = $server['attributes']['feature_limits']['allocations'];
+        $update['feature_limits']['databases'] =
+            $server['attributes']['feature_limits']['databases'];
+        $update['feature_limits']['backups'] =
+            $server['attributes']['feature_limits']['backups'];
+
 
         if ($request->has('egg_id')) {
             $request->validate([
