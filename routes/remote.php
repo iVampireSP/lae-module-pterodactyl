@@ -32,4 +32,5 @@ Route::apiResource('hosts', Remote\HostController::class)->only(['update', 'dest
 Route::group(['prefix' => '/functions'], function () {
     Route::apiResource('hosts', Functions\HostController::class);
     Route::get('nests', [Functions\NestController::class, 'nests']);
+    Route::get('locations', Functions\LocationController::class);
 });
