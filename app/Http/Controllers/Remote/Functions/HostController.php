@@ -31,8 +31,8 @@ class HostController extends Controller
             'location_id' => 'required|integer',
             'allocations' => 'required|integer|max:10|min:1',
             'memory' => 'required|integer|min:128',
-            'disks' => 'required|integer|min:1024',
-            'cpu' => 'required|integer|min:100|max:1200',
+            'disk' => 'required|integer|min:1024',
+            'cpu_limit' => 'required|integer|min:100|max:1200',
             'databases' => 'required|integer|max:5',
             'backups' => 'required|integer|max:50',
         ]);
@@ -64,8 +64,8 @@ class HostController extends Controller
                 'memory' => (int) $request->memory,
                 'swap' => (int) 1024,
                 'io' => 500,
-                'cpu' => (int) $request->cpu,
-                'disk' => (int) $request->disks,
+                'cpu' => (int) $request->cpu_limit,
+                'disk' => (int) $request->disk,
             ],
             'feature_limits' => [
                 'databases' => $request->databases ? (int) $request->databases : null,
