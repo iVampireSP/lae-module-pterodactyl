@@ -31,7 +31,7 @@ class HostController extends Controller
             'location_id' => 'required|integer',
             'allocations' => 'required|integer|max:10|min:1',
             'memory' => 'required|integer|min:128',
-            'disk' => 'required|integer|min:1024',
+            'disk' => 'required|integer|min:512|max:40960',
             'cpu_limit' => 'required|integer|min:100|max:1200',
             'databases' => 'required|integer|max:5',
             'backups' => 'required|integer|max:50',
@@ -117,6 +117,7 @@ class HostController extends Controller
 
         // get current server
         $server = $panel->server($host->server_id);
+        // dd($server);
 
         $update['allocation'] = $server['attributes']['allocation'];
         $update['swap'] = $server['attributes']['limits']['swap'];
@@ -176,12 +177,12 @@ class HostController extends Controller
 
         if ($request->has('disk')) {
             $request->validate([
-                'disk' => 'required|integer|min:1024|max:40960',
+                'disk' => 'required|integer|min:512|max:40960',
             ]);
 
-            if ($request->disk < $host->disk) {
-                return $this->error('磁盘空间无法减少。');
-            }
+            // if ($request->disk < $host->disk) {
+            //     return $this->error('磁盘空间无法减少。');
+            // }
 
             $update['disk'] = $request->disk;
         }
@@ -190,6 +191,12 @@ class HostController extends Controller
             $request->validate([
                 'allocations' => 'required|integer|max:10',
             ]);
+
+            $server_allocations_count = count($server['attributes']['relationships']['allocations']['data']);
+
+            if ($request->allocations < $server_allocations_count) {
+                return $this->error('分配的 端口 数量无法减少。除非您删除一些端口。');
+            }
 
             $update['feature_limits']['allocations'] = $request->allocations;
         }
