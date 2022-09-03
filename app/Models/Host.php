@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Client;
+use App\Models\WingsNestEgg;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
@@ -58,6 +59,11 @@ class Host extends Model
     public function location()
     {
         return $this->belongsTo(Location::class);
+    }
+
+    public function egg()
+    {
+        return $this->belongsTo(WingsNestEgg::class);
     }
 
     // workOrders

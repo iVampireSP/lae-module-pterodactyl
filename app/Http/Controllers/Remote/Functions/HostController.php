@@ -16,7 +16,9 @@ class HostController extends Controller
 {
     public function index()
     {
-        $hosts = Host::thisUser()->get();
+        $hosts = Host::thisUser()->with('egg', function ($query) {
+            $query->select(['id', 'name']);
+        })->get();
         return $this->success($hosts);
     }
 
@@ -88,6 +90,8 @@ class HostController extends Controller
     public function show(Request $request, Host $host)
     {
         $this->isUser($host);
+
+        $host->load('egg');
 
         return $this->success($host);
     }
