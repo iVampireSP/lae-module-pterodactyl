@@ -157,13 +157,13 @@ class HostController extends Controller
             $panel->updateServerStartup($host->server_id, $startup);
         }
 
-        if ($request->has('cpu')) {
+        if ($request->has('cpu_limit')) {
             $request->validate([
-                'cpu' => 'required|integer|min:100|max:1200',
+                'cpu_limit' => 'required|integer|min:100|max:1200',
             ]);
 
 
-            $update['cpu'] = $request->cpu;
+            $update['cpu'] = $request->cpu_limit;
         }
 
         if ($request->has('memory')) {
