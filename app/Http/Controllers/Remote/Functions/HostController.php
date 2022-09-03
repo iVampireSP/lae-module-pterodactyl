@@ -137,7 +137,7 @@ class HostController extends Controller
                 'egg_id' => 'required|integer',
             ]);
 
-            $egg = WingsNestEgg::find($request->egg_id);
+            $egg = WingsNestEgg::where('egg_id', $request->egg_id)->firstOrFail();
 
             $request_only['docker_image'] = $egg->docker_image;
             $request_only['egg_id'] = $egg->id;
