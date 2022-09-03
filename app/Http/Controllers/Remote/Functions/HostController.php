@@ -29,7 +29,7 @@ class HostController extends Controller
             'name' => 'required|string',
             'egg_id' => 'required|integer',
             'location_id' => 'required|integer',
-            'allocations' => 'required|integer|max:10',
+            'allocations' => 'required|integer|max:10|min:1',
             'memory' => 'required|integer|min:128',
             'disks' => 'required|integer|min:1024',
             'cpu' => 'required|integer|min:100|max:1200',
