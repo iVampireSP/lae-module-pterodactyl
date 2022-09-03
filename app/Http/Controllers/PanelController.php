@@ -167,7 +167,7 @@ class PanelController extends Controller
 
     public function server($id)
     {
-        return $this->get('/servers/'. $id . '?include=allocations');
+        return $this->get('/servers/'. $id . '?include=allocations,databases');
     }
 
     public function createServer($data)

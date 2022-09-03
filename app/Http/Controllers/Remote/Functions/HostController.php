@@ -117,7 +117,6 @@ class HostController extends Controller
 
         // get current server
         $server = $panel->server($host->server_id);
-        // dd($server);
 
         $update['allocation'] = $server['attributes']['allocation'];
         $update['swap'] = $server['attributes']['limits']['swap'];
@@ -205,6 +204,13 @@ class HostController extends Controller
             $request->validate([
                 'databases' => 'required|integer|max:5',
             ]);
+
+            $server_databases_count = count($server['attributes']['relationships']['databases']['data']);
+
+            if ($request->databases < $server_databases_count) {
+                return $this->error('数据库数量无法减少。除非您删除一些数据库。');
+            }
+
 
             $update['feature_limits']['databases'] = $request->databases;
         }
