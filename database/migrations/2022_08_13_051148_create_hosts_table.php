@@ -32,7 +32,7 @@ return new class extends Migration
             $table->unsignedInteger('backups')->index();
             $table->unsignedInteger('allocations')->index();
 
-            $table->unsignedBigInteger('location_id')->index();
+            // $table->unsignedBigInteger('location_id')->index();
             // $table->unsignedBigInteger('node_id')->index();
             $table->unsignedBigInteger('server_id')->index();
             $table->unsignedBigInteger('egg_id')->index();
