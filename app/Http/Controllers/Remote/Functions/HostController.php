@@ -91,7 +91,12 @@ class HostController extends Controller
     {
         $this->isUser($host);
 
+        $panel = new PanelController();
+
+        $server = $panel->server($host->server_id)['attributes'];
+
         $host->load('egg');
+        $host->server = $server;
 
         return $this->success($host);
     }
