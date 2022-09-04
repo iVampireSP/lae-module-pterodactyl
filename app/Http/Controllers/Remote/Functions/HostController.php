@@ -257,6 +257,8 @@ class HostController extends Controller
         // 具体删除逻辑
         $panel = new PanelController();
 
+        $host->load('location');
+
 
         $task = $this->http->post('/tasks', [
             'title' => '正在删除...',
@@ -278,6 +280,8 @@ class HostController extends Controller
         $this->http->patch('/tasks/' . $task_id, [
             'title' => '从我们的数据库中删除...',
         ]);
+
+        $host->location->decrement('servers');
 
         $host->delete();
 
