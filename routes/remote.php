@@ -33,5 +33,5 @@ Route::group(['prefix' => '/functions'], function () {
     Route::apiResource('hosts', Functions\HostController::class);
     Route::get('nests', [Functions\NestController::class, 'nests']);
     Route::get('locations', Functions\LocationController::class);
-    Route::apiResource('accounts', Functions\AccountController::class)->only(['index', 'update']);
+    Route::patch('account', [Functions\AccountController::class, 'update']);
 });
