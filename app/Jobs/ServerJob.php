@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Exception;
 use ErrorException;
 use App\Models\Host;
 use App\Models\Location;
@@ -49,9 +50,6 @@ class ServerJob implements ShouldQueue
 
         $data = $this->data;
         $host_id = $this->cloud_host_id;
-
-
-
 
         $panel = new PanelController();
 
@@ -130,8 +128,19 @@ class ServerJob implements ShouldQueue
                     'title' => '创建您的服务器中。',
                 ]);
 
+                try {
+                    $result = $panel->createServer($data);
+                }  catch (Exception) {
+                    $this->http->patch('/tasks/' . $task_id, [
+                        'title' => '创建服务器失败, 我们将撤销更改。',
+                        'status' => 'failed',
+                    ]);
 
-                $result = $panel->createServer($data);
+                    $this->http->delete('/hosts/' . $host_id);
+
+                    return false;
+
+                }
 
                 $nest = WingsNest::find($egg->nest_id);
                 $location = Location::where('location_id', $data['deploy']['locations'][0])->first();
