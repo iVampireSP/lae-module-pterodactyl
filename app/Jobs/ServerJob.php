@@ -116,7 +116,10 @@ class ServerJob implements ShouldQueue
                 ]);
 
 
-                $egg->environment = json_decode($egg->environment);
+                if (!is_array($egg->environment)) {
+                    $egg->environment = json_decode($egg->environment);
+                }
+
                 $data['environment'] = [];
                 foreach ($egg->environment as $env) {
                     $env = $env['attributes'];
