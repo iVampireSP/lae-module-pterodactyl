@@ -29,7 +29,7 @@ Route::apiResource('hosts', Remote\HostController::class)->only(['update', 'dest
  */
 
 // 当前模块的函数。服务器启停，创建，销毁，都需要进过这里。
-Route::group(['prefix' => '/functions'], function () {
+Route::group(['prefix' => '/functions', 'as' => 'functions.'], function () {
     Route::apiResource('hosts', Functions\HostController::class);
     Route::get('nests', [Functions\NestController::class, 'nests']);
     Route::get('locations', Functions\LocationController::class);
