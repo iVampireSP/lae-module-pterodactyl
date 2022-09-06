@@ -83,12 +83,17 @@ class Host extends Model
         $this->load('location');
         $price = 0;
         $price += $this->location->price;
-        $price += ($this->cpu_limit / 100) * 0.25;
-        $price += ($this->memory) * 0.3;
-        $price += ($this->disk / 100) * 0.25;
-        $price += $this->backups * 0.5;
-        $price += $this->allocations * 1;
-        $price += $this->databases * 1;
+        $price += ($this->cpu_limit / 100) * $this->location->cpu_price;
+        $price += ($this->memory) *
+            $this->location->memory_price;
+        $price += ($this->disk / 1024) *
+            $this->location->disk_price;
+        $price += $this->backups *
+            $this->location->backup_price;
+        $price += $this->allocations *
+            $this->location->allocation_price;
+        $price += $this->databases *
+            $this->location->database_price;
 
         return $price;
     }

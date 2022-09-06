@@ -10,10 +10,27 @@
 
         翼龙面板里的地区 ID：<input type="text" name="location_id" placeholder="翼龙面板里的地区 ID" />
 
+        <p>以下价格单位都是为 元。结算时会自动换算为 Drops</p>
         <br />
-        基础价格：<input type="text" name="price" placeholder="基础价格(元)" />
+        基础价格：<input type="text" name="price" placeholder="基础价格(元)" value="1" />
 
         <br />
+        每 CPU 价格(CPU / 100 为 1 核心)<input type="text" name="cpu_price" value="0.25" />
+
+        <br />
+        每内存价格(MB)<input type="text" name="memory_price" value="0.3" />
+
+        <br />
+        每硬盘价格(Disk / 1024 为 1 GB)<input type="text" name="disk_price" value="0.25" />
+
+        <br />
+        每一个备份的价格(个)<input type="text" name="backup_price" value="0.01" />
+
+        <br />
+        每一个端口的价格(个)<input type="text" name="allocation_price" value="0.01" />
+
+        <br />
+        每一个数据库的价格(个)<input type="text" name="database_price" value="0.01" />
 
         {{-- submit --}}
         <input type="submit" value="添加" />
