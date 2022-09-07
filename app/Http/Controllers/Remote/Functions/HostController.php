@@ -147,7 +147,9 @@ class HostController extends Controller
             $request_only['docker_image'] = $egg->docker_image;
             $request_only['egg_id'] = $egg->egg_id;
 
-            $egg->environment = json_decode($egg->environment);
+            if (!is_array($egg->environment)) {
+                $egg->environment = json_decode($egg->environment);
+            }
             $startup['environment'] = [];
             foreach ($egg->environment as $env) {
                 $env = $env['attributes'];
