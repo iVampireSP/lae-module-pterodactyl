@@ -3,21 +3,19 @@
 namespace App\Jobs;
 
 use Exception;
-use ErrorException;
 use App\Models\Host;
 use App\Models\Location;
-use App\Events\TeamEvent;
 use App\Models\WingsNest;
 use Illuminate\Support\Str;
 use App\Models\WingsNestEgg;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Http\Controllers\PanelController;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Log;
 
 class ServerJob implements ShouldQueue
 {
@@ -67,15 +65,27 @@ class ServerJob implements ShouldQueue
                 ]);
 
                 // 创建
-                $user = $panel->getUserByEmail($this->request['user']['email']);
-                if (!$user) {
-                    $user = $panel->createUser([
-                        'username' => $this->request['user']['name'],
-                        'email' => $this->request['user']['email'],
-                        'first_name' => Str::random(3),
-                        'last_name' => Str::random(5),
+                try {
+                    $user = $panel->getUserByEmail($this->request['user']['email']);
+                    if (!$user) {
+                        $user = $panel->createUser([
+                            'username' => $this->request['user']['name'],
+                            'email' => $this->request['user']['email'],
+                            'first_name' => Str::random(3),
+                            'last_name' => Str::random(5),
+                        ]);
+                    }
+                } catch (Exception $e) {
+                    $this->http->patch('/tasks/' . $task_id, [
+                        'title' => '创建用户失败。',
+                        'status' => 'failed',
                     ]);
+
+                    Log::error($e->getMessage());
+
+                    return;
                 }
+
 
                 $user_id = $user['data'][0]['attributes']['id'];
 
