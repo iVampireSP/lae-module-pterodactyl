@@ -18,7 +18,7 @@
         每 CPU 价格(CPU / 100 为 1 核心)<input type="text" name="cpu_price" value="{{ $location->cpu_price }}" />
 
         <br />
-        每内存价格(MB)<input type="text" name="memory_price" value="{{ $location->memory_price }}" />
+        每内存价格(MB)<input type="text" name="memory_price" value="{{ number_format($location->memory_price, 8) }}" />
 
         <br />
         每硬盘价格(Disk / 1024 为 1 GB)<input type="text" name="disk_price" value="{{ $location->disk_price }}" />

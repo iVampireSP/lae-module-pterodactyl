@@ -15,21 +15,13 @@ return new class extends Migration
     {
         Schema::table('locations', function (Blueprint $table) {
             //
-            // cpu price decimal
-            $table->decimal('cpu_price', 8, 2)->default(0.00)->after('price');
-            $table->decimal(
-                'memory_price',
-                8,
-                2
-            )->default(0.00)->after('price');
-            $table->decimal(
-                'disk_price',
-                8,
-                2
-            )->default(0.00)->after('price');
-            $table->decimal('backup_price', 8, 2)->default(0.00)->after('price');
-            $table->decimal('allocation_price', 8, 2)->default(0.00)->after('price');
-            $table->decimal('database_price', 8, 2)->default(0.00)->after('price');
+            // cpu price double
+            $table->double('cpu_price')->default(0.00)->after('price');
+            $table->double('memory_price')->default(0.00)->after('price');
+            $table->double('disk_price')->default(0.00)->after('price');
+            $table->double('backup_price')->default(0.00)->after('price');
+            $table->double('allocation_price')->default(0.00)->after('price');
+            $table->double('database_price')->default(0.00)->after('price');
         });
     }
 
