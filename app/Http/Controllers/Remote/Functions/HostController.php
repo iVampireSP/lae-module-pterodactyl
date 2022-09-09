@@ -261,6 +261,12 @@ class HostController extends Controller
      */
     public function destroy(Host $host)
     {
+
+        // 禁止删除 pending
+        if ($host->status === 'pending') {
+            return $this->error('主机正在创建中，无法删除。');
+        }
+
         // 具体删除逻辑
         $panel = new PanelController();
 
