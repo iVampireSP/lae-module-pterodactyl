@@ -276,7 +276,7 @@ class HostController extends Controller
         // dd($task);
 
         // 寻找服务器的逻辑
-        $task_id = $task['data']['id'];
+        $task_id = $task['data']['id'] ?? 0;
 
         $this->http->patch('/tasks/' . $task_id, [
             'title' => '从远程服务器删除...',
