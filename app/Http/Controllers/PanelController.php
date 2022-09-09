@@ -258,6 +258,7 @@ class PanelController extends Controller
         if ($response->status() == 404) {
             return true;
         }
+        
         // $response->throw();
         // if ($response->failed()) {
         //     throw new PanelException('Failed to delete server');
