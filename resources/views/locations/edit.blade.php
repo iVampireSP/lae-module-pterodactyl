@@ -10,9 +10,9 @@
         <br />
         翼龙面板里的地区 ID:<input type="text" name="location_id" placeholder="翼龙面板里的地区 ID" value="{{ $location->location_id }}"/>
 
-        <p>以下价格单位都是为 元。结算时会自动换算为 Drops</p>
+        <p>以下价格单位都是每 5 分钟要消耗 Drops</p>
         <br />
-        基础价格：<input type="text" name="price" placeholder="基础价格(元)" value="{{ $location->price }}" />
+        基础价格：<input type="text" name="price" placeholder="基础价格" value="{{ $location->price }}" />
 
         <br />
         每 CPU 价格(CPU / 100 为 1 核心)<input type="text" name="cpu_price" value="{{ $location->cpu_price }}" />
