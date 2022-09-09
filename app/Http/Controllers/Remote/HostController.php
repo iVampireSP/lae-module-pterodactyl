@@ -84,9 +84,12 @@ class HostController extends Controller
         $host = Host::where('host_id', $request->route('host'))->firstOrFail();
         // 或者执行 Functions/HostController.php 中的 destroy 方法。
 
+        if ($host->status === 'pending') {
+            return false;
+        }
+
         $HostController = new Functions\HostController();
 
         return $HostController->destroy($host);
-
     }
 }
