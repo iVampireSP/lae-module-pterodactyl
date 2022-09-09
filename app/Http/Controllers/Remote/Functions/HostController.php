@@ -278,9 +278,9 @@ class HostController extends Controller
         // 寻找服务器的逻辑
         $task_id = $task['data']['id'] ?? false;
 
-        if (!$task_id) {
-            return $this->error('任务创建失败。');
-        }
+        // if (!$task_id) {
+        //     return $this->error('任务创建失败。');
+        // }
 
         // 禁止删除 pending
         if ($host->status === 'pending') {
