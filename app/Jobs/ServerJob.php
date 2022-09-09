@@ -140,7 +140,9 @@ class ServerJob implements ShouldQueue
 
                 try {
                     $result = $panel->createServer($data);
-                }  catch (Exception) {
+                }  catch (Exception $e) {
+                    Log::error($e->getMessage());
+
                     $this->http->patch('/tasks/' . $task_id, [
                         'title' => '创建服务器失败, 我们将撤销更改。',
                         'status' => 'failed',
