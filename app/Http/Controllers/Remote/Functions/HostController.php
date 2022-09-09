@@ -261,12 +261,6 @@ class HostController extends Controller
      */
     public function destroy(Host $host)
     {
-
-        // 禁止删除 pending
-        if ($host->status === 'pending') {
-            return $this->error('主机正在创建中，无法删除。');
-        }
-
         // 具体删除逻辑
         $panel = new PanelController();
 
@@ -282,7 +276,18 @@ class HostController extends Controller
         // dd($task);
 
         // 寻找服务器的逻辑
-        $task_id = $task['data']['id'] ?? 0;
+        $task_id = $task['data']['id'] ?? false;
+
+        if (!$task_id) {
+            return $this->error('任务创建失败。');
+        }
+
+        // 禁止删除 pending
+        if ($host->status === 'pending') {
+            return $this->http->patch('/tasks/' . $task_id, [
+                'title' => '无法删除服务器，因为服务器状态为 pending。',
+            ]);;
+        }
 
         $this->http->patch('/tasks/' . $task_id, [
             'title' => '从远程服务器删除...',
