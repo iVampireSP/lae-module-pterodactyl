@@ -74,6 +74,10 @@ class ServerJob implements ShouldQueue
                             'first_name' => Str::random(3),
                             'last_name' => Str::random(5),
                         ]);
+
+                        $user_id = $user['data']['attributes']['id'];
+                    } else {
+                        $user_id = $user['data'][0]['attributes']['id'];
                     }
 
                     Log::debug("message", ['user' => $user]);
@@ -87,9 +91,6 @@ class ServerJob implements ShouldQueue
 
                     return;
                 }
-
-
-                $user_id = $user['data'][0]['attributes']['id'];
 
                 $data['user'] = $user_id;
 
