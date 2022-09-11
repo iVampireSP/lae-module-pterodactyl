@@ -67,7 +67,7 @@ class ServerJob implements ShouldQueue
                 // 创建
                 try {
                     $user = $panel->getUserByEmail($this->request['user']['email']);
-                    if (!$user) {
+                    if (count($user['data']) == 0) {
                         $user = $panel->createUser([
                             'username' => $this->request['user']['name'],
                             'email' => $this->request['user']['email'],
@@ -75,8 +75,8 @@ class ServerJob implements ShouldQueue
                             'last_name' => Str::random(5),
                         ]);
                     }
-                    Log::debug("message", ['user' => $user]);
 
+                    Log::debug("message", ['user' => $user]);
                 } catch (Exception $e) {
                     $this->http->patch('/tasks/' . $task_id, [
                         'title' => '创建用户失败。',
@@ -144,7 +144,7 @@ class ServerJob implements ShouldQueue
                     $result = $panel->createServer($data);
 
                     Log::debug('createServer', ['result' => $result]);
-                }  catch (Exception $e) {
+                } catch (Exception $e) {
                     Log::error($e->getMessage());
 
                     $this->http->patch('/tasks/' . $task_id, [
@@ -155,7 +155,6 @@ class ServerJob implements ShouldQueue
                     $this->http->delete('/hosts/' . $host_id);
 
                     return false;
-
                 }
 
                 $nest = WingsNest::find($egg->nest_id);
