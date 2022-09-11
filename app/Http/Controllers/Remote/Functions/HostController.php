@@ -79,7 +79,7 @@ class HostController extends Controller
             ],
             // 'environment' => $request->environment,
             'start_on_completion' => true,
-            'external_id' => (string) $host_id,
+            // 'external_id' => (string) $host_id,
         ];
 
         dispatch(new ServerJob('create', $host_id, $request->user_id, $server_data, $request->all()));
