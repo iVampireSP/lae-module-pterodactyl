@@ -75,6 +75,8 @@ class ServerJob implements ShouldQueue
                             'last_name' => Str::random(5),
                         ]);
                     }
+                    Log::debug("message", ['user' => $user]);
+
                 } catch (Exception $e) {
                     $this->http->patch('/tasks/' . $task_id, [
                         'title' => '创建用户失败。',
@@ -140,6 +142,8 @@ class ServerJob implements ShouldQueue
 
                 try {
                     $result = $panel->createServer($data);
+
+                    Log::debug('createServer', ['result' => $result]);
                 }  catch (Exception $e) {
                     Log::error($e->getMessage());
 
