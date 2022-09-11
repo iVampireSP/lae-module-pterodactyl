@@ -77,10 +77,9 @@ class ServerJob implements ShouldQueue
 
                         Log::debug("create user", ['user' => $user]);
 
-                        $user_id = $user['data']['attributes']['id'];
+                        $user_id = $user['attributes']['id'];
                     } else {
                         Log::debug("get user by email", ['user' => $user]);
-
 
                         $user_id = $user['data'][0]['attributes']['id'];
                     }
@@ -90,7 +89,7 @@ class ServerJob implements ShouldQueue
                         'status' => 'failed',
                     ]);
 
-                    Log::error($e->getMessage());
+                    Log::error('unable choose user', $e);
 
                     return;
                 }
