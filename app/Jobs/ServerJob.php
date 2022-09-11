@@ -75,12 +75,15 @@ class ServerJob implements ShouldQueue
                             'last_name' => Str::random(5),
                         ]);
 
+                        Log::debug("create user", ['user' => $user]);
+
                         $user_id = $user['data']['attributes']['id'];
                     } else {
+                        Log::debug("get user by email", ['user' => $user]);
+
+
                         $user_id = $user['data'][0]['attributes']['id'];
                     }
-
-                    Log::debug("message", ['user' => $user]);
                 } catch (Exception $e) {
                     $this->http->patch('/tasks/' . $task_id, [
                         'title' => '创建用户失败。',
