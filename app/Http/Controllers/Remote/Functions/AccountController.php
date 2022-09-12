@@ -26,13 +26,20 @@ class AccountController extends Controller
 
         try {
             $user = User::find($request->user_id);
+
+            if (is_null($user)) {
+                return $this->error('您还没有创建过 游戏容器，请先创建一个。');
+            }
+
             $user = $panel->getUserByEmail($user->email);
-            if (!$user) {
+            if (count($user['data']) == 0) {
                 return $this->error('找不到用户');
             }
         } catch (PanelException) {
             return $this->error('找不到用户');
         }
+
+        // $user_id = $user['data'][0]['attributes']['id'];
 
         $panel->updateUser($user['data'][0]['attributes']['id'], [
             'password' => $request->password,
