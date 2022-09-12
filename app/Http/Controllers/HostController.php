@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Host;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Http\Controllers\PanelController;
 
 class HostController extends Controller
 {
@@ -105,8 +106,18 @@ class HostController extends Controller
     {
         // 销毁前的逻辑
 
-        $HostController = new Remote\Functions\HostController();
-        $HostController->destroy($host);
+        $panel = new PanelController();
+
+        $host->load('location');
+
+        $panel->deleteServer($host->server_id);
+
+        $host->location->decrement('servers');
+
+        $host->delete();
+
+        // $HostController = new Remote\Functions\HostController();
+        // $HostController->destroy($host);
 
         return back()->with('success', '已开始销毁。');
     }
