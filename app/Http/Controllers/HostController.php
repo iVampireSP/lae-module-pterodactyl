@@ -116,9 +116,11 @@ class HostController extends Controller
 
         $host->delete();
 
+        $this->http->delete('/hosts/' . $host->host_id);
+
         // $HostController = new Remote\Functions\HostController();
         // $HostController->destroy($host);
 
-        return back()->with('success', '已开始销毁。');
+        return back()->with('success', '删除成功。');
     }
 }
