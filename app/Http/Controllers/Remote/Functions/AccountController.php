@@ -32,7 +32,7 @@ class AccountController extends Controller
                 return $this->error('您还没有创建过 游戏容器，请先创建一个。');
             }
 
-            Log::debug('reset user password (model)', $user);
+            Log::debug('reset user password (model)', $user->toArray());
 
             $user = $panel->getUserByEmail($user->email);
 
