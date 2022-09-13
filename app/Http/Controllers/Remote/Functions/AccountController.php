@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Exceptions\PanelException;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PanelController;
+use Illuminate\Support\Facades\Log;
 
 class AccountController extends Controller
 {
@@ -31,7 +32,12 @@ class AccountController extends Controller
                 return $this->error('您还没有创建过 游戏容器，请先创建一个。');
             }
 
+            Log::debug('reset user password (model)', $user);
+
             $user = $panel->getUserByEmail($user->email);
+
+            Log::debug('panel user', $user);
+
             if (count($user['data']) == 0) {
                 return $this->error('找不到用户');
             }
@@ -41,13 +47,16 @@ class AccountController extends Controller
 
         // $user_id = $user['data'][0]['attributes']['id'];
 
-        $panel->updateUser($user['data'][0]['attributes']['id'], [
+        $result = $panel->updateUser($user['data'][0]['attributes']['id'], [
             'password' => $request->password,
             'email' => $user['data'][0]['attributes']['email'],
             'username' => $user['data'][0]['attributes']['username'],
             'first_name' => $user['data'][0]['attributes']['first_name'],
             'last_name' => $user['data'][0]['attributes']['last_name']
         ]);
+
+        Log::debug('update panel user password result', $result);
+
 
         return $this->success();
     }
