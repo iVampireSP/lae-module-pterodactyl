@@ -247,9 +247,24 @@ class HostController extends Controller
             ]);
         }
 
+        $task = $this->http->post('/tasks', [
+            'title' => '正在应用更改...',
+            'host_id' => $host->host_id,
+            'status' => 'processing',
+        ])->json();
+        $task_id = $task['data']['id'] ?? false;
+
         $panel->updateServerBuild($host->server_id, $update);
 
         $host->update($request_only);
+
+        if ($task_id) {
+            $this->http->patch('/tasks/' . $task_id, [
+                'title' => '更改已应用。',
+                'status' => 'success',
+            ]);
+        }
+
         return $this->success($host);
     }
 
