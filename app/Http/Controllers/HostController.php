@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Host;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use App\Http\Controllers\PanelController;
 
 class HostController extends Controller
@@ -19,7 +18,9 @@ class HostController extends Controller
         //
         $hosts = Host::with('user')->simplePaginate(10);
 
-        return view('hosts.index', compact('hosts'));
+        $count = Host::count();
+
+        return view('hosts.index', ['hosts' => $hosts, 'count' => $count]);
     }
 
     /**
