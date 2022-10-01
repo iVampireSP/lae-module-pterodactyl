@@ -142,6 +142,13 @@ class HostController extends Controller
 
         $server = $panel->server($request->server_id);
 
+
+        $host = Host::where('server_id', $request->server_id)->first();
+
+        if ($host) {
+            return back()->with('error', '服务器已经存在。');
+        }
+
         $location_id = $server['attributes']['relationships']['location']['attributes']['id'];
 
         if (Location::where('location_id', $location_id)->doesntExist()) {
@@ -203,8 +210,10 @@ class HostController extends Controller
 
 
         $this->http->patch('/tasks/' . $task_id, [
-            'status' => 'completed',
+            'title' => '导入服务器成功。',
+            'status' => 'success',
         ]);
+
 
         return back()->with('success', '导入成功。');
     }
