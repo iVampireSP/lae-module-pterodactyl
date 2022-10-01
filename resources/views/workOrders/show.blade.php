@@ -9,7 +9,9 @@
     <h3>{{ $work_order->title }}</h3>
     <h3>{{ $work_order->content }}</h3>
 
-    <h3>服务 页面 <a href=" {{ route('hosts.show', $work_order->host->host_id) }}">{{ $work_order->host->name }}</a></h3>
+    @if (isset($work_order->host->host_id))
+        <h3>服务 页面 <a href="{{ route('hosts.show', $work_order->host->host_id) }}">{{ $work_order->host->name }}</a></h3>
+    @endif
 
 
     客户: {{ $work_order->user->name }} 的工单
