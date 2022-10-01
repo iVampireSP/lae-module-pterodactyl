@@ -215,6 +215,11 @@ class HostController extends Controller
         ]);
 
 
+        $this->http->patch('/hosts/' . $host['data']['id'], [
+            'status' => 'running',
+        ]);
+
+
         return back()->with('success', '导入成功。');
     }
 }
