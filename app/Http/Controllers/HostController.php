@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Host;
+use App\Models\User;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PanelController;
 
@@ -123,5 +125,87 @@ class HostController extends Controller
         // $HostController->destroy($host);
 
         return back()->with('success', '删除成功。');
+    }
+
+
+    public function import(Request $request)
+    {
+        // 从 面板 导入已有服务器
+
+
+        $request->validate([
+            'server_id' => 'required|int',
+        ]);
+
+
+        $panel = new PanelController();
+
+        $server = $panel->server($request->server_id);
+
+        $location_id = $server['attributes']['relationships']['location']['attributes']['id'];
+
+        if (Location::where('location_id', $location_id)->doesntExist()) {
+            return back()->with('error', '服务器所在的节点不存在。');
+        }
+
+        $user_email = $server['attributes']['relationships']['user']['attributes']['email'];
+
+        $user = User::where('email', $user_email)->first();
+
+        if (!$user) {
+            return back()->with('error', '服务器所属的用户不存在。');
+        }
+
+
+        $server_name = $server['attributes']['name'];
+
+        $host = $this->http->post('/hosts', [
+            'name' => $server_name,
+            'user_id' => $user->id, // 给指定用户创建主机
+            'price' => 0, // 计算的价格
+            'status' => 'pending', // 初始状态
+        ])->json();
+
+
+        $task = $this->http->post('/tasks', [
+            'title' => '正在导入服务器...',
+            'host_id' => $host['data']['id'],
+            'status' => 'processing',
+        ])->json();
+        $task_id = $task['data']['id'];
+
+
+        Host::create([
+            'name' => $server_name,
+            'egg_id' => $server['attributes']['egg'],
+            'cpu_limit' =>
+            $server['attributes']['limits']['cpu'],
+            'memory' =>
+            $server['attributes']['limits']['memory'],
+            'disk' =>
+            $server['attributes']['limits']['disk'],
+            'databases' => $server['attributes']['feature_limits']['databases'],
+            'backups' =>
+            $server['attributes']['feature_limits']['backups'],
+            'allocations' =>
+            $server['attributes']['feature_limits']['allocations'],
+            'server_id'
+            =>
+            $server['attributes']['id'],
+            'ip' => $server['attributes']['relationships']['allocations']['data'][0]['attributes']['ip'],
+            'port'
+            => $server['attributes']['relationships']['allocations']['data'][0]['attributes']['port'],
+            'user_id' => $server['attributes']['user'],
+            'status' => 'running',
+            'host_id' => $host['data']['id'],
+            'location_id' => $location_id,
+        ]);
+
+
+        $this->http->patch('/tasks/' . $task_id, [
+            'status' => 'completed',
+        ]);
+
+        return back()->with('success', '导入成功。');
     }
 }

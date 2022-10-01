@@ -167,7 +167,7 @@ class PanelController extends Controller
 
     public function server($id)
     {
-        return $this->get('/servers/'. $id . '?include=allocations,databases');
+        return $this->get('/servers/'. $id . '?include=allocations,databases,user,location,nest,egg');
     }
 
     public function createServer($data)
@@ -258,7 +258,7 @@ class PanelController extends Controller
         if ($response->status() == 404) {
             return true;
         }
-        
+
         // $response->throw();
         // if ($response->failed()) {
         //     throw new PanelException('Failed to delete server');

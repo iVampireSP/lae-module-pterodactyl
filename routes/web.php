@@ -23,6 +23,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('hosts', HostController::class);
     Route::resource('work-orders', WorkOrderController::class);
     Route::resource('work-orders.replies', ReplyController::class);
+
+
+    Route::view('/hosts/import', 'hosts.import');
+    Route::post('/hosts/import', [HostController::class, 'import'])->name('hosts.import');
     // Route::resource('products', ProductController::class);
     // // Route::resource('configurable-options', ConfigurableOptionController::class);
     // Route::resource(
