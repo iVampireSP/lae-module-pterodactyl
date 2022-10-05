@@ -33,11 +33,21 @@ class Remote
 
         if ($request->user_id) {
             if ($request->isMethod('post')) {
-                $user = User::where('id', $request->user['id'])->firstOrCreate([
-                    'id' => $request->user['id'],
-                    'name' => $request->user['name'],
-                    'email' => $request->user['email'],
-                ]);
+                // $user = User::where('id', $request->user['id'])->firstOrCreate([
+                //     'id' => $request->user['id'],
+                //     'name' => $request->user['name'],
+                //     'email' => $request->user['email'],
+                // ]);
+
+
+                $user = User::where('id', $request->user_id)->first();
+                if (!$user) {
+                    $user = User::create([
+                        'id' => $request->user['id'],
+                        'name' => $request->user['name'],
+                        'email' => $request->user['email'],
+                    ]);
+                }
             }
         }
 
