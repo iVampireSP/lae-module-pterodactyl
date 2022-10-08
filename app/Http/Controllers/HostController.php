@@ -156,16 +156,16 @@ class HostController extends Controller
         }
 
 
-        // $last_name = $server['attributes']['relationships']['user']['attributes']['last_name'];
+        $last_name = $server['attributes']['relationships']['user']['attributes']['last_name'];
         $user_email = $server['attributes']['relationships']['user']['attributes']['email'];
 
         $user = User::where('email', $user_email)->first();
 
         if (!$user) {
-            // $user = User::create([
-            //     'email' => $user_email,
-            //     'name' => $last_name,
-            // ]);
+            $user = User::create([
+                'email' => $user_email,
+                'name' => $last_name,
+            ]);
 
             return back()->with('error', '服务器所属的用户不存在。');
         }
@@ -209,7 +209,7 @@ class HostController extends Controller
             'ip' => $server['attributes']['relationships']['allocations']['data'][0]['attributes']['ip'],
             'port'
             => $server['attributes']['relationships']['allocations']['data'][0]['attributes']['port'],
-            'user_id' => $server['attributes']['user'],
+            'user_id' => $user->id,
             'status' => 'running',
             'host_id' => $host['data']['id'],
             'location_id' => $location_id,
