@@ -116,6 +116,12 @@ class Host extends Model
             ]);
         });
 
+        // created
+        static::created(function ($model) {
+            $model->load('location');
+            $model->location->increment('servers');
+        });
+
         // update
         static::updating(function ($model) {
             $http = Http::remote('remote')->asForm();
@@ -132,6 +138,13 @@ class Host extends Model
             $http->patch('/hosts/' . $model->host_id, [
                 'price' => $model->price
             ]);
+        });
+
+
+        // when deleted
+        static::deleting(function ($model) {
+            $model->load('location');
+            $model->location->decrement('servers');
         });
     }
 }

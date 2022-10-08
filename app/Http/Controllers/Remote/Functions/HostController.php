@@ -314,8 +314,6 @@ class HostController extends Controller
             'title' => '从我们的数据库中删除...',
         ]);
 
-        $host->location->decrement('servers');
-
         $host->delete();
 
         // 告诉云端，此主机已被删除。
