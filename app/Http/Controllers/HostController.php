@@ -155,11 +155,18 @@ class HostController extends Controller
             return back()->with('error', '服务器所在的节点不存在。');
         }
 
+
+        $last_name = $server['attributes']['relationships']['user']['attributes']['last_name'];
         $user_email = $server['attributes']['relationships']['user']['attributes']['email'];
 
         $user = User::where('email', $user_email)->first();
 
         if (!$user) {
+            $user = User::create([
+                'email' => $user_email,
+                'name' => $last_name,
+            ]);
+
             return back()->with('error', '服务器所属的用户不存在。');
         }
 
