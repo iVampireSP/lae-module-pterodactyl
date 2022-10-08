@@ -90,6 +90,13 @@
                             @method('DELETE')
                             <button type="submit">删除</button>
                         </form>
+                        <form action="{{ route('hosts.destroy_db', $host->id) }}" method="POST"
+                            onsubmit="return confirm('真的要删除吗？此选项将不删除远程服务器，只从数据库中删除。')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">仅从数据库中删除</button>
+                        </form>
+
                     </td>
 
                 </tr>

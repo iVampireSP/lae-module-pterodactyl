@@ -21,6 +21,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', UserController::class);
     Route::resource('locations', LocationController::class);
     Route::resource('hosts', HostController::class);
+    Route::delete('hosts/{host}/only_delete_db', [HostController::class, 'destroy_db'])->name('hosts.destroy_db');
     Route::resource('work-orders', WorkOrderController::class);
     Route::resource('work-orders.replies', ReplyController::class);
 

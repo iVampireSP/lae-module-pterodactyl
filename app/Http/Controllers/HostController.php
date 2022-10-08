@@ -229,4 +229,38 @@ class HostController extends Controller
 
         return back()->with('success', '导入成功。');
     }
+
+
+
+    public function destroy_db(Host $host)
+    {
+        $host->load('location');
+
+        $task = $this->http->post('/tasks', [
+            'title' => '正在删除...',
+            'host_id' => $host->host_id,
+            'status' => 'processing',
+        ])->json();
+
+        $task_id = $task['data']['id'] ?? false;
+
+        if ($host->status === 'pending') {
+            return $this->http->patch('/tasks/' . $task_id, [
+                'title' => '无法删除服务器，因为服务器状态为 pending。',
+                'status' => 'failed'
+            ]);
+        }
+
+
+        $this->http->patch('/tasks/' . $task_id, [
+            'title' => '从我们的数据库中删除...',
+        ]);
+
+        $host->delete();
+
+        // 告诉云端，此主机已被删除。
+        $this->http->delete('/hosts/' . $host->host_id);
+
+        return back()->with('success', '仅从数据库删除成功。');
+    }
 }

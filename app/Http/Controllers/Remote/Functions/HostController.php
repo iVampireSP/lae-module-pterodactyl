@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Remote\Functions;
 use App\Models\Host;
 use App\Jobs\ServerJob;
 use App\Models\Location;
-use Illuminate\Support\Str;
+// use Illuminate\Support\Str;
 use App\Models\WingsNestEgg;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+// use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PanelController;
 
@@ -301,7 +301,7 @@ class HostController extends Controller
         if ($host->status === 'pending') {
             return $this->http->patch('/tasks/' . $task_id, [
                 'title' => '无法删除服务器，因为服务器状态为 pending。',
-            ]);;
+            ]);
         }
 
         $this->http->patch('/tasks/' . $task_id, [
