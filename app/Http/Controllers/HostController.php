@@ -156,7 +156,7 @@ class HostController extends Controller
         }
 
 
-        $last_name = $server['attributes']['relationships']['user']['attributes']['last_name'];
+        // $last_name = $server['attributes']['relationships']['user']['attributes']['last_name'];
         $user_email = $server['attributes']['relationships']['user']['attributes']['email'];
 
         $user = User::where('email', $user_email)->first();
