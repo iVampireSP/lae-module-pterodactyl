@@ -162,10 +162,10 @@ class HostController extends Controller
         $user = User::where('email', $user_email)->first();
 
         if (!$user) {
-            $user = User::create([
-                'email' => $user_email,
-                'name' => $last_name,
-            ]);
+            // $user = User::create([
+            //     'email' => $user_email,
+            //     'name' => $last_name,
+            // ]);
 
             return back()->with('error', '服务器所属的用户不存在。');
         }
