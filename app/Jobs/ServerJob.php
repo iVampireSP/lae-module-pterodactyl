@@ -80,16 +80,8 @@ class ServerJob implements ShouldQueue
                             Log::debug('包含中文', ['name' => $old_name, 'pinyin' => $name]);
                         }
 
-
-
-                        // if (preg_match('/[\x{4e00}-\x{9fa5}]/u', $name)) {
-                        //     $pinyin = new Pinyin();
-
-                        //     $name = $pinyin->permalink($name, '');
-                        // }
-
                         $user = $panel->createUser([
-                            'username' => $this->request['user']['name'],
+                            'username' => $name,
                             'email' => $this->request['user']['email'],
                             'first_name' => Str::random(3),
                             'last_name' => Str::random(5),
