@@ -73,12 +73,11 @@ class ServerJob implements ShouldQueue
                         // 如果名称包含中文
                         $name = $this->request['user']['name'];
                         if (preg_match('/[\x{4e00}-\x{9fa5}]/u', $name) > 0) {
-
-
+                            $old_name = $name;
                             $pinyin = new Pinyin();
                             $name = $pinyin->permalink($name, '');
 
-                            Log::debug('包含中文', ['name' => $name, 'pinyin' => $pinyin]);
+                            Log::debug('包含中文', ['name' => $old_name, 'pinyin' => $name]);
                         }
 
 
