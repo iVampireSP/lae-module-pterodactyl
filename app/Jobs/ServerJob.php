@@ -70,13 +70,24 @@ class ServerJob implements ShouldQueue
                     $user = $panel->getUserByEmail($this->request['user']['email']);
                     if (count($user['data']) == 0) {
 
-                        // 如果名称是中文，那转换为拼音
+                        // 如果名称包含中文
                         $name = $this->request['user']['name'];
-                        if (preg_match('/[\x{4e00}-\x{9fa5}]/u', $name)) {
-                            $pinyin = new Pinyin();
+                        if (preg_match('/[\x{4e00}-\x{9fa5}]/u', $name) > 0) {
 
+
+                            $pinyin = new Pinyin();
                             $name = $pinyin->permalink($name, '');
+
+                            Log::debug('包含中文', ['name' => $name, 'pinyin' => $pinyin]);
                         }
+
+
+
+                        // if (preg_match('/[\x{4e00}-\x{9fa5}]/u', $name)) {
+                        //     $pinyin = new Pinyin();
+
+                        //     $name = $pinyin->permalink($name, '');
+                        // }
 
                         $user = $panel->createUser([
                             'username' => $this->request['user']['name'],
