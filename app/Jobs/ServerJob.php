@@ -89,7 +89,7 @@ class ServerJob implements ShouldQueue
                         'status' => 'failed',
                     ]);
 
-                    Log::error('unable choose user', $e);
+                    Log::error('unable choose user', $e->getMessage());
 
                     return;
                 }
