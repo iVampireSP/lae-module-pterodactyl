@@ -7,15 +7,16 @@ use App\Models\Host;
 use App\Models\Location;
 use App\Models\WingsNest;
 use Illuminate\Support\Str;
+use Overtrue\Pinyin\Pinyin;
 use App\Models\WingsNestEgg;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Http\Controllers\PanelController;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Support\Facades\Log;
 
 class ServerJob implements ShouldQueue
 {
@@ -68,6 +69,15 @@ class ServerJob implements ShouldQueue
                 try {
                     $user = $panel->getUserByEmail($this->request['user']['email']);
                     if (count($user['data']) == 0) {
+
+                        // 如果名称是中文，那转换为拼音
+                        $name = $this->request['user']['name'];
+                        if (preg_match('/[\x{4e00}-\x{9fa5}]/u', $name)) {
+                            $pinyin = new Pinyin();
+
+                            $name = $pinyin->permalink($name, '');
+                        }
+
                         $user = $panel->createUser([
                             'username' => $this->request['user']['name'],
                             'email' => $this->request['user']['email'],
