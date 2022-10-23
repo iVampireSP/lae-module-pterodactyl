@@ -12,9 +12,11 @@ class IndexController extends Controller
     public function index()
     {
         // if not login, redirect to login
-        if (!Auth::check()) {
+        if (!Auth::guard('web')->check()) {
             return view('login');
         } else {
+
+            // $module =
             $module = $this->http->get('modules')->json()['data'];
 
             $total = $module['transactions']['this_month']['balance'];
@@ -44,7 +46,7 @@ class IndexController extends Controller
         // login
 
         // attempt to login (remember)
-        if (Auth::attempt($request->only(['email', 'password']), $request->has('remember'))) {
+        if (Auth::guard('web')->attempt($request->only(['email', 'password']), $request->has('remember'))) {
             // if success, redirect to home
             return redirect()->intended('/');
         } else {
@@ -53,10 +55,10 @@ class IndexController extends Controller
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
         // logout
-        Auth::logout();
+        Auth::guard('web')->logout();
         return redirect()->route('login');
     }
-
 }

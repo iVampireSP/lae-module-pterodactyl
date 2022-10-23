@@ -14,9 +14,11 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, ApiResponse;
 
     protected $http;
+    protected $panel;
 
     public function __construct()
     {
-        $this->http = Http::remote('remote')->asForm();
+        $this->http = Http::remote()->asForm();
+        $this->panel = Http::panel()->asForm();
     }
 }

@@ -5,11 +5,10 @@ namespace App\Http\Middleware;
 use Closure;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
-class Remote
+class ApiToken
 {
     /**
      * Handle an incoming request.
@@ -20,15 +19,23 @@ class Remote
      */
     public function handle(Request $request, Closure $next)
     {
-
         // add json header
         $request->headers->set('Accept', 'application/json');
-        if (!$request->hasHeader('X-Remote-Api-Token')) {
+
+        // bearer token
+        if (!$request->hasHeader('Authorization')) {
             return $this->unauthorized();
         }
 
-        $token = $request->header('X-Remote-Api-Token');
-        if ($token !== config('remote.api_token')) {
+        $token = $request->bearerToken();
+
+        $config_token = config('app.api_token');
+
+        if ($config_token == null) {
+            return $this->unauthorized();
+        }
+
+        if ($token !== $config_token) {
             return $this->unauthorized();
         }
 
@@ -51,6 +58,7 @@ class Remote
 
         return $next($request);
     }
+
 
     public function unauthorized()
     {

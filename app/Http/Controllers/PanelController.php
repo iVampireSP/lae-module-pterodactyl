@@ -3,20 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\PanelException;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
-use GuzzleHttp\Exception\ConnectException;
-use Illuminate\Contracts\Support\Renderable;
-use Illuminate\Http\Client\RequestException;
-use App\Models\WingsNode;
 
 class PanelController extends Controller
 {
-    protected $url;
-    protected $http;
+    protected $http, $url, $panel;
 
     public function __construct()
     {
@@ -24,6 +17,7 @@ class PanelController extends Controller
         $this->http = Http::withToken(config('panel.key'))->withHeaders([
             'Accept' => 'Application/vnd.pterodactyl.v1+json',
         ]);
+        $this->panel = Http::panel()->asForm();
     }
 
 
@@ -167,7 +161,7 @@ class PanelController extends Controller
 
     public function server($id)
     {
-        return $this->get('/servers/'. $id . '?include=allocations,databases,user,location,nest,egg');
+        return $this->get('/servers/' . $id . '?include=allocations,databases,user,location,nest,egg');
     }
 
     public function createServer($data)
@@ -265,5 +259,21 @@ class PanelController extends Controller
         // } else {
         //     return true;
         // }
+    }
+
+
+    public function detail($identifier)
+    {
+        return $this->panel->get('/servers/' . $identifier)->json();
+    }
+
+    public function websocket($identifier)
+    {
+        return $this->panel->get('/servers/' . $identifier . '/websocket')->json();
+    }
+
+    public function resources($identifier)
+    {
+        return $this->panel->get('/servers/' . $identifier . '/resources')->json();
     }
 }

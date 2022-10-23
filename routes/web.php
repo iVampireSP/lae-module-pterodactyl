@@ -12,9 +12,8 @@ use App\Http\Controllers\UserController;
 Route::view('/login', 'login')->name('login');
 Route::post('/login', [IndexController::class, 'login']);
 
-
 // Auth group
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth:web'], function () {
     Route::get('/', [IndexController::class, 'index'])->name('index');
 
 
