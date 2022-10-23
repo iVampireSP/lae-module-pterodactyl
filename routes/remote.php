@@ -34,9 +34,13 @@ Route::group(['prefix' => '/functions', 'as' => 'functions.'], function () {
     Route::get('nests', [Functions\NestController::class, 'nests']);
     Route::get('locations', Functions\LocationController::class);
     Route::patch('account', [Functions\AccountController::class, 'update']);
+
+    // 匹配所有
+    Route::get('hosts/{host}/server', [Functions\HostController::class, 'server_detail']);
+    Route::any('hosts/{host}/server/{path}', [Functions\HostController::class, 'server'])->where('path', '.*');
 });
 
 // 导出函数。用于给其它集成模块调用。做到模块之间相互交换信息或控制。
 Route::group(['prefix' => '/exports', 'as' => 'exports.'], function () {
-    Route::apiResource('hosts', Exports\HostController::class);
+    // Route::apiResource('hosts', Exports\HostController::class);
 });

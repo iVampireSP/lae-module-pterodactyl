@@ -339,4 +339,35 @@ class HostController extends Controller
             }
         }
     }
+
+
+    public function server(Host $host, $path)
+    {
+        $this->isUser($host);
+
+        // get request method
+        $method = request()->method();
+
+        // get request data
+        $data = request()->all();
+
+        $path = 'servers/' . $host->identifier . '/' . $path;
+
+        $result = $this->panel->{$method}($path, $data)->json();
+
+        return $this->success($result);
+
+    }
+
+    public function server_detail(Host $host)
+    {
+        $this->isUser($host);
+
+        $result = $this->panel->get('servers/' . $host->identifier)->json();
+
+        unset($result['attributes']['server_owner']);
+
+        return $this->success($result);
+
+    }
 }
