@@ -341,6 +341,21 @@ class HostController extends Controller
     {
         $this->isUser($host);
 
+        return $this->api_server($host, $path);
+
+    }
+
+    public function server_detail(Host $host)
+    {
+        $this->isUser($host);
+
+        return $this->api_server_detail($host);
+    }
+
+
+
+    public function api_server(Host $host, $path)
+    {
         // get request method
         $method = request()->method();
 
@@ -354,10 +369,8 @@ class HostController extends Controller
         return $this->success($result);
     }
 
-    public function server_detail(Host $host)
+    public function api_server_detail(Host $host)
     {
-        $this->isUser($host);
-
         $result = $this->panel->get('servers/' . $host->identifier)->json();
 
         unset($result['attributes']['server_owner']);
