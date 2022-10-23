@@ -331,12 +331,8 @@ class HostController extends Controller
 
     public function isUser(Host $host)
     {
-        // return $host->user_id == Auth::id();
-
-        if (request('user_id') !== null) {
-            if ($host->user_id != request('user_id')) {
-                abort(403);
-            }
+        if ($host->user_id != auth()->id()) {
+            abort(403, '您无权访问此主机。');
         }
     }
 
@@ -356,7 +352,6 @@ class HostController extends Controller
         $result = $this->panel->{$method}($path, $data)->json();
 
         return $this->success($result);
-
     }
 
     public function server_detail(Host $host)
@@ -368,6 +363,5 @@ class HostController extends Controller
         unset($result['attributes']['server_owner']);
 
         return $this->success($result);
-
     }
 }
