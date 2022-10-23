@@ -183,6 +183,7 @@ class ServerJob implements ShouldQueue
 
                 Host::create([
                     'name' => $data['name'],
+                    'identifier' => $result['attributes']['identifier'],
                     'egg_id' => $data['egg'],
                     'cpu_limit' => $data['limits']['cpu'],
                     'memory' => $data['limits']['memory'],
