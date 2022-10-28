@@ -46,9 +46,16 @@ class HostController extends Controller
             'user_id' => $request->user_id, // 给指定用户创建主机
             'price' => 0, // 计算的价格
             'status' => 'pending', // 初始状态
-        ])->json();
+        ]);
 
-        $host_id = $host['data']['id'];
+
+        $host_response = $host->json();
+
+        if ($host->successful()) {
+            $host_id = $host_response['data']['id'];
+        } else {
+            return $this->error($host_response['data']);
+        }
 
         $egg = WingsNestEgg::where('egg_id', $request->egg_id)->firstOrFail();
         $nest_id = $egg->nest_id;
