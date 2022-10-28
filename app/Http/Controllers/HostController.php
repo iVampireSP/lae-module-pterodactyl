@@ -206,7 +206,7 @@ class HostController extends Controller
             'server_id'
             =>
             $server['attributes']['id'],
-            'ip' => $server['attributes']['relationships']['allocations']['data'][0]['attributes']['ip'],
+            'ip' => $server['attributes']['relationships']['allocations']['data'][0]['attributes']['alias'] ?? $server['attributes']['relationships']['allocations']['data'][0]['attributes']['ip'],
             'port'
             => $server['attributes']['relationships']['allocations']['data'][0]['attributes']['port'],
             'user_id' => $user->id,
