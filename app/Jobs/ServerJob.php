@@ -179,7 +179,7 @@ class ServerJob implements ShouldQueue
                 $egg->increment('servers');
                 $nest->increment('servers');
 
-                $result_ip = $result['attributes']['relationships']['allocations']['data'][0]['attributes']['ip_alias'] ?? $result['attributes']['relationships']['allocations']['data'][0]['attributes']['ip'];
+                $result_ip = $result['attributes']['relationships']['allocations']['data'][0]['attributes']['alias'] ?? $result['attributes']['relationships']['allocations']['data'][0]['attributes']['ip'];
 
                 Host::create([
                     'name' => $data['name'],
