@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PanelController;
+use Illuminate\Support\Facades\Log;
 
 class HostController extends Controller
 {
@@ -256,10 +257,14 @@ class HostController extends Controller
             'title' => '从我们的数据库中删除...',
         ]);
 
-        $host->delete();
+
+        // Log::debug($host->host_id);
 
         // 告诉云端，此主机已被删除。
         $this->http->delete('/hosts/' . $host->host_id);
+        // Log::debug($delete_resp->json());
+
+        $host->delete();
 
         return back()->with('success', '仅从数据库删除成功。');
     }
