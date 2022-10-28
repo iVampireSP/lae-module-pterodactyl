@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PanelController;
+use Illuminate\Support\Facades\Log;
 
 class HostController extends Controller
 {
@@ -308,22 +309,31 @@ class HostController extends Controller
             'title' => '从远程服务器删除...',
         ]);
 
-        $panel->deleteServer($host->server_id);
+        try {
+            $panel->deleteServer($host->server_id);
 
-        $this->http->patch('/tasks/' . $task_id, [
-            'title' => '从我们的数据库中删除...',
-        ]);
+            $this->http->patch('/tasks/' . $task_id, [
+                'title' => '从我们的数据库中删除...',
+            ]);
 
-        $host->delete();
 
-        // 告诉云端，此主机已被删除。
-        $this->http->delete('/hosts/' . $host->host_id);
+            $host->delete();
 
-        // 完成任务
-        $this->http->patch('/tasks/' . $task_id, [
-            'title' => '删除成功。',
-            'status' => 'success',
-        ]);
+            // 告诉云端，此主机已被删除。
+            $this->http->delete('/hosts/' . $host->host_id);
+
+            // 完成任务
+            $this->http->patch('/tasks/' . $task_id, [
+                'title' => '删除成功。',
+                'status' => 'success',
+            ]);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            $this->http->patch('/tasks/' . $task_id, [
+                'title' => '删除失败。',
+                'status' => 'failed',
+            ]);
+        }
 
         return $this->deleted($host);
     }
@@ -342,7 +352,6 @@ class HostController extends Controller
         $this->isUser($host);
 
         return $this->api_server($host, $path);
-
     }
 
     public function server_detail(Host $host)
