@@ -120,7 +120,7 @@ class HostController extends Controller
     public function update(Request $request, Host $host)
     {
         // 排除 request 中的一些参数
-        $request_only = $request->except(['id', 'user_id', 'host_id', 'price', 'managed_price', 'suspended_at', 'created_at', 'updated_at', 'status']);
+        $request_only = $request->except(['id', 'user_id', 'host_id', 'identifier', 'price', 'managed_price', 'suspended_at', 'created_at', 'updated_at', 'status']);
 
 
         $panel = new PanelController();
