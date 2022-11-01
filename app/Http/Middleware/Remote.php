@@ -49,6 +49,12 @@ class Remote
             Auth::guard('user')->login($user);
         }
 
+        // created_at and updated_at 序列化
+        $request->merge([
+            'created_at' => Carbon::parse($request->created_at ?? now())->toDateTimeString(),
+            'updated_at' => Carbon::parse($request->updated_at ?? now())->toDateTimeString(),
+        ]);
+
         return $next($request);
     }
 
