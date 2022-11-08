@@ -50,6 +50,10 @@ class Host extends Model
         return $query->where('user_id', $user_id);
     }
 
+    public function getRouteKeyName()
+    {
+        return 'host_id';
+    }
 
     // user
     public function user()
