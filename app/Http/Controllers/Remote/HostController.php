@@ -9,7 +9,7 @@ use App\Http\Controllers\PanelController;
 
 class HostController extends Controller
 {
-    public function index(Host $host)
+    public function show(Host $host)
     {
         return $this->success($host);
     }
