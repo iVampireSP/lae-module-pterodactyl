@@ -9,6 +9,11 @@ use App\Http\Controllers\PanelController;
 
 class HostController extends Controller
 {
+    public function index(Host $host)
+    {
+        return $this->success($host);
+    }
+
     public function update(Request $request)
     {
         //
