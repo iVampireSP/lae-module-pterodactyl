@@ -23,11 +23,11 @@ class Remote
 
         // add json header
         $request->headers->set('Accept', 'application/json');
-        if (!$request->hasHeader('X-Remote-Api-Token')) {
+        if (!$request->hasHeader('X-Module-Api-Token')) {
             return $this->unauthorized();
         }
 
-        $token = $request->header('X-Remote-Api-Token');
+        $token = $request->header('X-Module-Api-Token');
         if ($token !== config('remote.api_token')) {
             return $this->unauthorized();
         }
