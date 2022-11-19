@@ -16,28 +16,9 @@ class IndexController extends Controller
             return view('login');
         } else {
 
-            // $module =
-            $module = $this->http->get('modules')->json()['data'];
+            $years = $this->http->get('modules')->json()['data'];
 
-            $total = $module['transactions']['this_month']['balance'];
-
-            $drops = $module['transactions']['this_month']['drops'] / $module['rate'];
-
-            if ($drops < 0) {
-                $drops = 0;
-            }
-
-            $total += $drops;
-
-            $total = round($total, 2);
-
-            $module = [
-                'balance' => $module['transactions']['this_month']['balance'],
-                'drops' => $module['transactions']['this_month']['drops'],
-                'total' => $total,
-            ];
-
-            return view('index', ['module' => $module]);
+            return view('index', ['years' => $years]);
         }
     }
 
