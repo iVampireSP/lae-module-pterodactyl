@@ -25,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Http::macro('remote', function () {
-            return Http::withoutVerifying()->withToken(config('remote.api_token'))->baseUrl(config('remote.url'));
+            return Http::withoutVerifying()->withToken(config('remote.api_token'))->baseUrl(config('remote.url'))->acceptJson();
         });
 
         Http::macro('panel', function () {
