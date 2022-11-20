@@ -10,7 +10,7 @@
 
         翼龙面板里的地区 ID：<input type="text" name="location_id" placeholder="翼龙面板里的地区 ID" />
 
-        <p>以下价格单位都是为 元。结算时会自动换算为 Drops</p>
+        <p>以下价格单位都是为 元，并且是每月价格。</p>
         <br />
         基础价格：<input type="text" name="price" placeholder="基础价格(元)" value="1" />
 
