@@ -54,6 +54,7 @@ class HostController extends Controller
         if ($host->successful()) {
             $host_id = $host_response['data']['id'];
         } else {
+            Log::error('创建主机失败', $host_response);
             return $this->error($host_response['data']);
         }
 

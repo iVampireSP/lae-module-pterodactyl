@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Log;
 
 class Host extends Model
 {
@@ -88,18 +89,29 @@ class Host extends Model
         $this->load('location');
         $price = 0;
         $price += $this->location->price;
+        // Log::debug('location price: ' . $this->location->price);
         $price += ($this->cpu_limit / 100) * $this->location->cpu_price;
-        $price += ($this->memory) *
+        // Log::debug('cpu price: ' . ($this->cpu_limit / 100) * $this->location->cpu_price);
+        $price += ($this->memory / 1024) *
             $this->location->memory_price;
+        // Log::debug('memory price: ' . ($this->memory) * $this->location->memory_price);
         $price += ($this->disk / 1024) *
             $this->location->disk_price;
+        // Log::debug('disk price: ' . ($this->disk / 1024) * $this->location->disk_price);
+
         $price += $this->backups *
             $this->location->backup_price;
+        // Log::debug('backup price: ' . $this->backups * $this->location->backup_price);
         $price += $this->allocations *
             $this->location->allocation_price;
+        // Log::debug('allocation price: ' . $this->allocations * $this->location->allocation_price);
         $price += $this->databases *
             $this->location->database_price;
+        // Log::debug('database price: ' . $this->databases * $this->location->database_price);
 
+        // Log::debug('total price: ' . $price);
+
+        $price = round($price, 8);
         return $price;
     }
 
