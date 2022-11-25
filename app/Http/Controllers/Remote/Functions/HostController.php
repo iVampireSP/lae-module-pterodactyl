@@ -44,7 +44,7 @@ class HostController extends Controller
         $host = $this->http->post('/hosts', [
             'name' => $request->name, // 主机名称，如果为 null 则随机生成。
             'user_id' => $request->user_id, // 给指定用户创建主机
-            'price' => 0, // 计算的价格
+            'price' => 0.01, // 计算的价格
             'status' => 'pending', // 初始状态
         ]);
 
