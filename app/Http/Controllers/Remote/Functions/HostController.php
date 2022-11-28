@@ -31,7 +31,7 @@ class HostController extends Controller
             'egg_id' => 'required|integer',
             'location_id' => 'required|integer',
             'allocations' => 'required|integer|max:10|min:1',
-            'memory' => 'required|integer|min:128',
+            'memory' => 'required|integer|min:128|max:40960',
             'disk' => 'required|integer|min:512|max:40960',
             'cpu_limit' => 'required|integer|min:100|max:1200',
             'databases' => 'required|integer|max:5',
