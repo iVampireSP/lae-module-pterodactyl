@@ -14,4 +14,8 @@ class Location extends Model
         'cpu_price', 'memory_price', 'disk_price',
         'database_price', 'backup_price', 'allocation_price',
     ];
+
+    public function hosts() {
+        return $this->hasMany(Host::class);
+    }
 }

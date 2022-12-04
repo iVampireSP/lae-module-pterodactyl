@@ -160,8 +160,7 @@ class Host extends Model
 
         // when deleted
         static::deleting(function ($model) {
-            $model->load('location');
-            $model->location->decrement('servers');
+            Location::find($model->location_id)->decrement('servers');
         });
     }
 }
