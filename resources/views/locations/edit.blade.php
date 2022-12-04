@@ -8,6 +8,15 @@
         {{-- name --}}
         显示名称：<input type="text" name="name" placeholder="地区名称" value="{{ $location->name }}" />
         <br />
+        <br />
+        <br />
+
+        描述
+        <textarea name="description" rows="10" cols="50">{{ $location->description }}</textarea>
+
+        <br />
+
+
         翼龙面板里的地区 ID:<input type="text" name="location_id" placeholder="翼龙面板里的地区 ID"
             value="{{ $location->location_id }}" />
 
