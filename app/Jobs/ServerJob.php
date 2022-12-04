@@ -80,6 +80,11 @@ class ServerJob implements ShouldQueue
                             Log::debug('包含中文', ['name' => $old_name, 'pinyin' => $name]);
                         }
 
+                        // 将空格替换为下划线
+                        $name = str_replace(' ', '_', $name);
+
+                        $name = Str::lower($name);
+
                         $user = $panel->createUser([
                             'username' => $name,
                             'email' => $this->request['user']['email'],
