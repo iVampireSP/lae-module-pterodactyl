@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Remote;
 
 use App\Models\Admin;
-use App\Models\Server;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -18,7 +17,7 @@ class RemoteController extends Controller
             'remote' => [
                 'name' => config('remote.module_id'),
             ],
-            'servers' => Server::all()->toArray()
+            'servers' => Cache::get('nodes_status'),
         ];
 
         return $this->success($data);
