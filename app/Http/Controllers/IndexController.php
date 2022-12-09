@@ -4,29 +4,51 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class IndexController extends Controller
 {
     //
 
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->filled('fast_login_token')) {
+            $admin = Cache::get('fast_login_' . $request->fast_login_token);
+
+            if ($admin) {
+                Auth::guard('web')->login($admin, true);
+
+                Cache::forget('fast_login_' . $request->fast_login_token);
+
+                return redirect()->route('index')->with('success', '您已从 莱云 面板登录。');
+            } else {
+                // 丢弃所有 session
+                Auth::guard('web')->logout();
+
+                return redirect()->route('login')->with('error', '您需要登录才能继续。');
+            }
+        }
+
         // if not login, redirect to login
         if (!Auth::guard('web')->check()) {
             return view('login');
         } else {
 
-            $years = $this->http->get('modules')->json()['data'];
+            // $module =
+            $modules = $this->http->get('modules');
 
-            return view('index', ['years' => $years]);
+            $response = $modules->json();
+            if ($modules->successful()) {
+                return view('index', ['years' => $response['data']]);
+            } else {
+                return view('error', ['response' => $response]);
+            }
         }
     }
 
     public function login(Request $request)
     {
-        // login
-
-        // attempt to login (remember)
+        // attempt to login
         if (Auth::guard('web')->attempt($request->only(['email', 'password']), $request->has('remember'))) {
             // if success, redirect to home
             return redirect()->intended('/');
