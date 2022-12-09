@@ -15,7 +15,7 @@ class RemoteController extends Controller
     {
         $data = [
             'remote' => [
-                'name' => config('remote.module_id'),
+                'name' => config('remote.module_name'),
             ],
             'servers' => Cache::get('nodes_status'),
         ];
