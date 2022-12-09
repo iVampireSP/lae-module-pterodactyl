@@ -13,7 +13,7 @@ use App\Http\Controllers\Remote\Functions;
  */
 
 
-Route::get('/login', [IndexController::class, 'index'])->name('login');
+Route::get('/remote', [Remote\RemoteController::class, 'index']);
 Route::post('/fast-login', [Remote\RemoteController::class, 'login']);
 
 Route::apiResource('work-orders', Remote\WorkOrder\WorkOrderController::class);
