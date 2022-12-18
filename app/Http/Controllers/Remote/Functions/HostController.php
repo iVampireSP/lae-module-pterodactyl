@@ -52,10 +52,10 @@ class HostController extends Controller
         $host_response = $host->json();
 
         if ($host->successful()) {
-            $host_id = $host_response['data']['id'];
+            $host_id = $host_response['id'];
         } else {
             Log::error('创建主机失败', $host_response);
-            return $this->error($host_response['data']);
+            return $this->error($host_response);
         }
 
         $egg = WingsNestEgg::where('egg_id', $request->egg_id)->firstOrFail();
@@ -261,7 +261,7 @@ class HostController extends Controller
             'host_id' => $host->host_id,
             'status' => 'processing',
         ])->json();
-        $task_id = $task['data']['id'] ?? false;
+        $task_id = $task['id'] ?? false;
 
         $panel->updateServerBuild($host->server_id, $update);
 
@@ -300,7 +300,7 @@ class HostController extends Controller
         // dd($task);
 
         // 寻找服务器的逻辑
-        $task_id = $task['data']['id'] ?? false;
+        $task_id = $task['id'] ?? false;
 
         // if (!$task_id) {
         //     return $this->error('任务创建失败。');

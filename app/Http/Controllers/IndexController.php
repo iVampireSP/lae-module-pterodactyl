@@ -39,7 +39,7 @@ class IndexController extends Controller
 
             $response = $modules->json();
             if ($modules->successful()) {
-                return view('index', ['years' => $response['data']]);
+                return view('index', ['years' => $response]);
             } else {
                 return view('error', ['response' => $response]);
             }

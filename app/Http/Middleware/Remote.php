@@ -40,9 +40,9 @@ class Remote
                 $user = $http->get('/users/' . $request->user_id)->json();
 
                 $user = User::create([
-                    'id' => $user['data']['id'],
-                    'name' => $user['data']['name'],
-                    'email' => $user['data']['email'],
+                    'id' => $user['id'],
+                    'name' => $user['name'],
+                    'email' => $user['email'],
                 ]);
             }
 

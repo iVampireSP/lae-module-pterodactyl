@@ -184,10 +184,10 @@ class HostController extends Controller
 
         $task = $this->http->post('/tasks', [
             'title' => '正在导入服务器...',
-            'host_id' => $host['data']['id'],
+            'host_id' => $host['id'],
             'status' => 'processing',
         ])->json();
-        $task_id = $task['data']['id'];
+        $task_id = $task['id'];
 
 
         Host::create([
@@ -212,7 +212,7 @@ class HostController extends Controller
             => $server['attributes']['relationships']['allocations']['data'][0]['attributes']['port'],
             'user_id' => $user->id,
             'status' => 'running',
-            'host_id' => $host['data']['id'],
+            'host_id' => $host['id'],
             'location_id' => $location_id,
         ]);
 
@@ -223,7 +223,7 @@ class HostController extends Controller
         ]);
 
 
-        $this->http->patch('/hosts/' . $host['data']['id'], [
+        $this->http->patch('/hosts/' . ['id'], [
             'status' => 'running',
         ]);
 
@@ -243,7 +243,7 @@ class HostController extends Controller
             'status' => 'processing',
         ])->json();
 
-        $task_id = $task['data']['id'] ?? false;
+        $task_id = $task['id'] ?? false;
 
         if ($host->status === 'pending') {
             return $this->http->patch('/tasks/' . $task_id, [

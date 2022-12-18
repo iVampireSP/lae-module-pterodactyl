@@ -57,7 +57,7 @@ class ServerJob implements ShouldQueue
             'host_id' => $this->cloud_host_id,
             'status' => 'processing',
         ])->json();
-        $task_id = $task['data']['id'];
+        $task_id = $task['id'];
 
         switch ($this->type) {
             case 'create':
