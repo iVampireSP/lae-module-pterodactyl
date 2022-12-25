@@ -68,6 +68,9 @@ class ServerJob implements ShouldQueue
                 // 创建
                 try {
                     $user = $panel->getUserByEmail($this->request['user']['email']);
+
+                    Log::debug("get user", ['user' => $user]);
+
                     if (count($user['data']) == 0) {
 
                         // 如果名称包含中文
@@ -79,6 +82,7 @@ class ServerJob implements ShouldQueue
 
                             Log::debug('包含中文', ['name' => $old_name, 'pinyin' => $name]);
                         }
+
 
                         // 将空格替换为下划线
                         $name = str_replace(' ', '_', $name);
@@ -102,9 +106,11 @@ class ServerJob implements ShouldQueue
                     }
                 } catch (Exception $e) {
                     $this->http->patch('/tasks/' . $task_id, [
-                        'title' => '创建用户失败。请修改用户名后重试。',
+                        'title' => '创建用户失败: ' . $e->getMessage(),
                         'status' => 'failed',
                     ]);
+
+                    $this->http->delete('/hosts/' . $host_id);
 
                     Log::error('unable choose/create user', [$e->getMessage()]);
 

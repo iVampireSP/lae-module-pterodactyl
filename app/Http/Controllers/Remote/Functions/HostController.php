@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PanelController;
+use App\Jobs\UpdateServerJob;
 use Illuminate\Support\Facades\Log;
 
 class HostController extends Controller
@@ -102,10 +103,15 @@ class HostController extends Controller
 
         $panel = new PanelController();
 
-        $server = $panel->server($host->server_id)['attributes'];
+
+        $server = $panel->server($host->server_id);
+
+        if (!$server) {
+            return $this->error('服务器不存在。');
+        }
 
         $host->load('egg');
-        $host->server = $server;
+        $host->server = $server['attributes'];
 
         return $this->success($host);
     }
@@ -120,136 +126,58 @@ class HostController extends Controller
      */
     public function update(Request $request, Host $host)
     {
-        // 排除 request 中的一些参数
-        $request_only = $request->except(['id', 'user_id', 'host_id', 'identifier', 'price', 'managed_price', 'suspended_at', 'created_at', 'updated_at', 'status']);
-
-
-        $panel = new PanelController();
-
-        $update = [];
-        $startup = [];
-
-        // get current server
-        $server = $panel->server($host->server_id);
-
-        $update['allocation'] = $server['attributes']['allocation'];
-        $update['swap'] = $server['attributes']['limits']['swap'];
-        $update['memory'] = $server['attributes']['limits']['memory'];
-        $update['cpu'] = $server['attributes']['limits']['cpu'];
-        $update['io'] = $server['attributes']['limits']['io'];
-        $update['disk'] = $server['attributes']['limits']['disk'];
-
-        $update['feature_limits']['allocations'] = $server['attributes']['feature_limits']['allocations'];
-        $update['feature_limits']['databases'] =
-            $server['attributes']['feature_limits']['databases'];
-        $update['feature_limits']['backups'] =
-            $server['attributes']['feature_limits']['backups'];
-
+        $task = $this->http->post('/tasks', [
+            'title' => '挂起',
+            'host_id' => $host->host_id,
+            'status' => 'pending',
+        ])->json();
+        $task_id = $task['id'] ?? false;
 
         if ($request->has('egg_id')) {
             $request->validate([
                 'egg_id' => 'required|integer',
             ]);
-
-            $egg = WingsNestEgg::where('egg_id', $request->egg_id)->firstOrFail();
-
-            $request_only['docker_image'] = $egg->docker_image;
-            $request_only['egg_id'] = $egg->egg_id;
-
-            if (!is_array($egg->environment)) {
-                $egg->environment = json_decode($egg->environment);
-            }
-            $startup['environment'] = [];
-            foreach ($egg->environment as $env) {
-                $env = $env['attributes'];
-                $startup['environment'][$env['env_variable']] = $env['default_value'];
-            }
-
-            $startup['skip_scripts'] = false;
-            $startup['startup'] = $egg->startup;
-            $startup['egg'] = $egg->egg_id;
-            $startup['image'] = $egg->docker_image;
-
-            $panel->updateServerStartup($host->server_id, $startup);
         }
+
 
         if ($request->has('cpu_limit')) {
             $request->validate([
                 'cpu_limit' => 'required|integer|min:100|max:1200',
             ]);
-
-
-            $update['cpu'] = $request->cpu_limit;
         }
 
         if ($request->has('memory')) {
             $request->validate([
                 'memory' => 'required|integer|min:1024|max:16384',
             ]);
-
-            $update['memory'] = $request->memory;
         }
 
         if ($request->has('disk')) {
             $request->validate([
                 'disk' => 'required|integer|min:512|max:40960',
             ]);
-
-            // if ($request->disk < $host->disk) {
-            //     return $this->error('磁盘空间无法减少。');
-            // }
-
-            $update['disk'] = $request->disk;
         }
 
         if ($request->has('allocations')) {
             $request->validate([
                 'allocations' => 'required|integer|max:10',
             ]);
-
-            $server_allocations_count = count($server['attributes']['relationships']['allocations']['data']);
-
-            if ($request->allocations < $server_allocations_count) {
-                return $this->error('分配的 端口 数量无法减少。除非您删除一些端口。');
-            }
-
-            $update['feature_limits']['allocations'] = $request->allocations;
         }
 
         if ($request->has('databases')) {
             $request->validate([
                 'databases' => 'required|integer|max:5',
             ]);
-
-            $server_databases_count = count($server['attributes']['relationships']['databases']['data']);
-
-            if ($request->databases < $server_databases_count) {
-                return $this->error('数据库数量无法减少。除非您删除一些数据库。');
-            }
-
-
-            $update['feature_limits']['databases'] = $request->databases;
         }
 
         if ($request->has('backups')) {
             $request->validate([
                 'backups' => 'required|integer|max:50',
             ]);
-
-            $update['feature_limits']['backups'] = $request->backups;
         }
 
+        dispatch(new UpdateServerJob($request->toArray(), $host->id, $task_id));
 
-        // dd($update);
-
-
-        // 如果请求中没有状态操作，则更新其他字段，比如 name 等。
-        // 更新时要注意一些安全问题，比如 user_id 不能被用户更新。
-        // 这些我们在此函数一开始就检查了。
-
-        // 此时，你可以通知云平台，主机已经更新。但是也请注意安全。
-
-        // if has name
         if ($request->has('name')) {
             // 检测 name 是否为空
             if (empty($request['name'])) {
@@ -262,25 +190,8 @@ class HostController extends Controller
             ]);
         }
 
-        $task = $this->http->post('/tasks', [
-            'title' => '正在应用更改...',
-            'host_id' => $host->host_id,
-            'status' => 'processing',
-        ])->json();
-        $task_id = $task['id'] ?? false;
 
-        $panel->updateServerBuild($host->server_id, $update);
-
-        $host->update($request_only);
-
-        if ($task_id) {
-            $this->http->patch('/tasks/' . $task_id, [
-                'title' => '更改已应用。',
-                'status' => 'success',
-            ]);
-        }
-
-        return $this->success($host);
+        return $this->updated('正在更新...');
     }
 
     /**
