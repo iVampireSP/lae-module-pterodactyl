@@ -58,7 +58,7 @@ class HostController extends Controller
             return $this->error($host_response);
         }
 
-        $egg = WingsNestEgg::where('egg_id', $request->egg_id)->firstOrFail();
+        $egg = WingsNestEgg::where('egg_id', $request->egg_id)->where('found', 1)->firstOrFail();
         $nest_id = $egg->nest_id;
 
         $server_data = [

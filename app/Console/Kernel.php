@@ -25,6 +25,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->job(new CheckNode())->everyMinute()->name('CheckNode');
 
+        // run recount command every 5 minutes
+        $schedule->command('recount')->everyFiveMinutes()->name('Recount location servers');
+
     }
 
     /**

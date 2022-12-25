@@ -102,11 +102,11 @@ class ServerJob implements ShouldQueue
                     }
                 } catch (Exception $e) {
                     $this->http->patch('/tasks/' . $task_id, [
-                        'title' => '创建用户失败。',
+                        'title' => '创建用户失败。请修改用户名后重试。',
                         'status' => 'failed',
                     ]);
 
-                    Log::error('unable choose user', [$e->getMessage()]);
+                    Log::error('unable choose/create user', [$e->getMessage()]);
 
                     return;
                 }
