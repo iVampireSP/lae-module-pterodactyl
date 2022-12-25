@@ -126,13 +126,6 @@ class HostController extends Controller
      */
     public function update(Request $request, Host $host)
     {
-        $task = $this->http->post('/tasks', [
-            'title' => '挂起',
-            'host_id' => $host->host_id,
-            'status' => 'pending',
-        ])->json();
-        $task_id = $task['id'] ?? false;
-
         if ($request->has('egg_id')) {
             $request->validate([
                 'egg_id' => 'required|integer',
@@ -176,6 +169,13 @@ class HostController extends Controller
             ]);
         }
 
+        $task = $this->http->post('/tasks', [
+            'title' => '挂起',
+            'host_id' => $host->host_id,
+            'status' => 'pending',
+        ])->json();
+        $task_id = $task['id'] ?? false;
+
         dispatch(new UpdateServerJob($request->toArray(), $host->id, $task_id));
 
         if ($request->has('name')) {
@@ -187,6 +187,12 @@ class HostController extends Controller
 
             $this->http->patch('/hosts/' . $host->host_id, [
                 'name' => $request->name,
+            ]);
+
+
+            $this->http->patch('/tasks/' . $task_id, [
+                'title' => '名称修改完成。',
+                'status' => 'done',
             ]);
         }
 
