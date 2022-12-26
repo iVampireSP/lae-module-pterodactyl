@@ -16,7 +16,7 @@ class PanelController extends Controller
         $this->url = config('panel.url') . '/api/application';
         $this->http = Http::withToken(config('panel.key'))->withHeaders([
             'Accept' => 'Application/vnd.pterodactyl.v1+json',
-        ])->throw();
+        ]);
         $this->panel = Http::panel()->asForm();
     }
 
