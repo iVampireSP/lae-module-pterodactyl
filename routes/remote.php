@@ -43,7 +43,7 @@ Route::group(['prefix' => '/functions', 'as' => 'functions.'], function () {
 
 // 导出函数。用于给其它集成模块调用。做到模块之间相互交换信息或控制。
 Route::group(['prefix' => '/exports', 'as' => 'exports.'], function () {
-    // 匹配所有
+    Route::get('hosts', [Functions\HostController::class, 'api_hosts']);
     Route::get('hosts/{host}/server', [Functions\HostController::class, 'api_server_detail']);
     Route::any('hosts/{host}/server/{path}', [Functions\HostController::class, 'api_server'])->where('path', '.*');
 });

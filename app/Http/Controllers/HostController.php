@@ -24,7 +24,7 @@ class HostController extends Controller
         // filter with all request
         foreach ($request->all() as $field) {
             if ($request->has($field)) {
-                $hosts->where($field, 'like', '%' . $request->input($field) . '%');
+                $hosts = $hosts->where($field, 'like', '%' . $request->input($field) . '%');
             }
         }
 
