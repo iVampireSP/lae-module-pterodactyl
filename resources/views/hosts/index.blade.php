@@ -42,7 +42,7 @@
                     <td>{{ $host->created_at }}</td>
                     <td>{{ $host->updated_at }}</td>
                     <td>
-                        <a href="{{ route('hosts.edit', $host->id) }}">编辑</a>
+                        <a target="_blank" href="{{ config('panel.url') }}/server/{{$host->identifier}}">控制台</a>
 
                         @if ($host->status == 'suspended')
                             <form action="{{ route('hosts.update', $host->id) }}" method="POST">
