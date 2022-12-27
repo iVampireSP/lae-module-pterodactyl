@@ -22,12 +22,11 @@ class HostController extends Controller
         $hosts = Host::with('user');
 
         // filter with all request
-        foreach ($request->all() as $field) {
-            if ($request->has($field)) {
-                $hosts = $hosts->where($field, 'like', '%' . $request->input($field) . '%');
+        foreach ($request->all() as $key => $field) {
+            if ($request->filled($key)) {
+                $hosts->where($key, 'like', '%' . $field . '%');
             }
         }
-
 
         $hosts = $hosts->simplePaginate(100);
 
