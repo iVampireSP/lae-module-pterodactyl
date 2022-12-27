@@ -88,7 +88,7 @@ class HostController extends Controller
                 'port_range' => []
             ],
             // 'environment' => $request->environment,
-            'start_on_completion' => true,
+            'start_on_completion' => false,
             // 'external_id' => (string) $host_id,
         ];
 
