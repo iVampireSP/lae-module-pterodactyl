@@ -317,4 +317,10 @@ class HostController extends Controller
 
         return $this->success($result);
     }
+
+    public function api_hosts() {
+        $hosts = Host::where('user_id', auth()->id())->get();
+
+        return $this->success($hosts);
+    }
 }
