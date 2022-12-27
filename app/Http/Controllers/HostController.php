@@ -16,10 +16,20 @@ class HostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        $hosts = Host::with('user')->simplePaginate(100);
+        $hosts = Host::with('user');
+
+        // filter with all request
+        foreach ($request->all() as $field) {
+            if ($request->has($field)) {
+                $hosts->where($field, 'like', '%' . $request->input($field) . '%');
+            }
+        }
+
+
+        $hosts = $hosts->simplePaginate(100);
 
         $count = Host::count();
 
