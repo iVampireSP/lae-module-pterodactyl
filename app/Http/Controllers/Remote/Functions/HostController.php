@@ -189,6 +189,10 @@ class HostController extends Controller
                 'name' => $request->name,
             ]);
 
+            // 修改模型
+            $host->name = $request->name;
+            $host->save();
+
 
             $this->http->patch('/tasks/' . $task_id, [
                 'title' => '名称修改完成。',
