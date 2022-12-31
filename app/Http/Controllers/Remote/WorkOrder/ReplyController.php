@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Remote\WorkOrder;
 
-use Illuminate\Http\Request;
-use App\Models\WorkOrder\Reply;
 use App\Http\Controllers\Controller;
+use App\Models\WorkOrder\Reply;
+use Illuminate\Http\Request;
 
 class ReplyController extends Controller
 {
@@ -21,7 +21,8 @@ class ReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -29,19 +30,19 @@ class ReplyController extends Controller
         // store
         $reply = new Reply();
         $reply->work_order_id = $request->work_order_id;
-        $reply->content = $request->content;
+        $reply->content = $request->input('content');
         $reply->user_id = $request->user_id;
         $reply->save();
 
         // return
         return $this->created($reply);
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -52,8 +53,9 @@ class ReplyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -64,7 +66,8 @@ class ReplyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Reply  $reply
+     * @param Reply $reply
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Reply $reply)
