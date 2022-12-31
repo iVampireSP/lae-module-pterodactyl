@@ -224,14 +224,19 @@ class HostController extends Controller
             'status' => 'processing',
         ])->json();
 
-        // dd($task);
-
-        // 寻找服务器的逻辑
         $task_id = $task['id'] ?? false;
 
         // if (!$task_id) {
         //     return $this->error('任务创建失败。');
         // }
+
+        // 必须创建大于 1 分钟后才能删除
+        if ($host->created_at->diffInMinutes(now()) < 1) {
+            return $this->http->patch('/tasks/' . $task_id, [
+                'title' => '无法删除服务器，因为服务器创建时间不足 1 分钟。',
+            ]);
+        }
+
 
         // 禁止删除 pending
         if ($host->status === 'pending') {
@@ -322,7 +327,8 @@ class HostController extends Controller
         return $this->success($result);
     }
 
-    public function api_hosts() {
+    public function api_hosts()
+    {
         $hosts = Host::where('user_id', auth()->id())->get();
 
         return $this->success($hosts);
