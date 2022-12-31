@@ -232,17 +232,23 @@ class HostController extends Controller
 
         // 必须创建大于 1 分钟后才能删除
         if ($host->created_at->diffInMinutes(now()) < 1) {
-            return $this->http->patch('/tasks/' . $task_id, [
+            $this->http->patch('/tasks/' . $task_id, [
                 'title' => '无法删除服务器，因为服务器创建时间不足 1 分钟。',
+                'status' => 'failed'
             ]);
+
+            return $this->error('无法删除服务器，因为服务器创建时间不足 1 分钟。');
         }
 
 
         // 禁止删除 pending
         if ($host->status === 'pending') {
-            return $this->http->patch('/tasks/' . $task_id, [
-                'title' => '无法删除服务器，因为服务器状态为 pending。',
+            $this->http->patch('/tasks/' . $task_id, [
+                'title' => '',
+                'status' => 'failed'
             ]);
+
+            return $this->error('无法删除服务器，因为服务器状态为 pending。');
         }
 
         $this->http->patch('/tasks/' . $task_id, [
