@@ -80,7 +80,7 @@ class UpdateServerJob implements ShouldQueue
             $server['attributes']['feature_limits']['backups'];
 
 
-        if ($request['egg_id']) {
+        if ($request['egg_id'] && $request['egg_id'] != $host->egg_id) {
             $egg = WingsNestEgg::where('egg_id', $request['egg_id'])->firstOrFail();
 
             $request_only['docker_image'] = $egg->docker_image;
