@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="card-body">
-                    {{ \Illuminate\Mail\Markdown::parse($reply->content) }}
+                    @parsedown($reply->content)
                 </div>
             </div>
         @endforeach

@@ -13,7 +13,8 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
-        "overtrue/pinyin": "^5.0"
+        "overtrue/pinyin": "^5.0",
+        "parsedown/laravel": "^1.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
