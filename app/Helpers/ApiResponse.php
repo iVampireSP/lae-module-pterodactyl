@@ -23,7 +23,7 @@ trait ApiResponse
     // error
     public function error($message = '', $code = 400)
     {
-        return $this->apiResponse(['message' => $message], $code);
+        return $this->apiResponse($message, $code);
     }
 
 
