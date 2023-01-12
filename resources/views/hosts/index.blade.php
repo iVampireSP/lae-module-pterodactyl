@@ -45,14 +45,14 @@
                         <a target="_blank" href="{{ config('panel.url') }}/server/{{$host->identifier}}">控制台</a>
 
                         @if ($host->status == 'suspended')
-                            <form action="{{ route('hosts.update', $host->id) }}" method="POST">
+                            <form action="{{ route('hosts.update', $host->host_id) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="running" />
                                 <button type="submit">取消暂停</button>
                             </form>
                         @else
-                            <form action="{{ route('hosts.update', $host->id) }}" method="POST">
+                            <form action="{{ route('hosts.update', $host->host_id) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="suspended" />
@@ -61,14 +61,14 @@
                         @endif
 
                         @if ($host->status == 'stopped')
-                            <form action="{{ route('hosts.update', $host->id) }}" method="POST">
+                            <form action="{{ route('hosts.update', $host->host_id) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="running" />
                                 <button type="submit">启动</button>
                             </form>
                         @else
-                            <form action="{{ route('hosts.update', $host->id) }}" method="POST">
+                            <form action="{{ route('hosts.update', $host->host_id) }}" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <input type="hidden" name="status" value="stopped" />
@@ -77,20 +77,20 @@
                         @endif
 
 
-                        <form action="{{ route('hosts.update', $host->id) }}" method="POST"
+                        <form action="{{ route('hosts.update', $host->host_id) }}" method="POST"
                             onsubmit="return confirm('在非必要情况下，不建议手动扣费。要继续吗？')">
                             @csrf
                             @method('PATCH')
                             <input type="hidden" name="status" value="cost" />
                             <button type="submit">扣费</button>
                         </form>
-                        <form action="{{ route('hosts.destroy', $host->id) }}" method="POST"
+                        <form action="{{ route('hosts.destroy', $host->host_id) }}" method="POST"
                             onsubmit="return confirm('真的要删除吗？')">
                             @csrf
                             @method('DELETE')
                             <button type="submit">删除</button>
                         </form>
-                        <form action="{{ route('hosts.destroy_db', $host->id) }}" method="POST"
+                        <form action="{{ route('hosts.destroy_db', $host->host_id) }}" method="POST"
                             onsubmit="return confirm('真的要删除吗？此选项将不删除远程服务器，只从数据库中删除。')">
                             @csrf
                             @method('DELETE')

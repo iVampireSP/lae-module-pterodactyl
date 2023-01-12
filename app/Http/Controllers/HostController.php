@@ -32,7 +32,6 @@ class HostController extends Controller
 
         $hosts = $hosts->simplePaginate(100);
 
-
         return view('hosts.index', ['hosts' => $hosts, 'count' => $count]);
     }
 
