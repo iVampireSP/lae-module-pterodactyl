@@ -28,9 +28,10 @@ class HostController extends Controller
             }
         }
 
+        $count = $hosts->count();
+
         $hosts = $hosts->simplePaginate(100);
 
-        $count = Host::count();
 
         return view('hosts.index', ['hosts' => $hosts, 'count' => $count]);
     }
