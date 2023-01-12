@@ -41,24 +41,6 @@ class HostController extends Controller
 
         $location = Location::findOrFail($request->location_id);
 
-        // 预留主机位置
-        $host = $this->http->post('/hosts', [
-            'name' => $request->name, // 主机名称，如果为 null 则随机生成。
-            'user_id' => $request->user_id, // 给指定用户创建主机
-            'price' => 0.01, // 预留 0.01 用于验证用户的余额
-            'status' => 'pending', // 初始状态
-        ]);
-
-
-        $host_response = $host->json();
-
-        if ($host->successful()) {
-            $host_id = $host_response['id'];
-        } else {
-            Log::error('创建主机失败', $host_response);
-            return $this->error($host_response);
-        }
-
         $egg = WingsNestEgg::where('egg_id', $request->egg_id)->where('found', 1)->firstOrFail();
         $nest_id = $egg->nest_id;
 
@@ -91,6 +73,26 @@ class HostController extends Controller
             'start_on_completion' => false,
             // 'external_id' => (string) $host_id,
         ];
+
+
+        // 预留主机位置
+        $host = $this->http->post('/hosts', [
+            'name' => $request->name, // 主机名称，如果为 null 则随机生成。
+            'user_id' => $request->user_id, // 给指定用户创建主机
+            'price' => 0.01, // 预留 0.01 用于验证用户的余额
+            'status' => 'pending', // 初始状态
+        ]);
+
+
+        $host_response = $host->json();
+
+        if ($host->successful()) {
+            $host_id = $host_response['id'];
+        } else {
+            Log::error('创建主机失败', $host_response);
+            return $this->error($host_response);
+        }
+
 
         dispatch(new ServerJob('create', $host_id, $request->user_id, $server_data, $request->all()));
 
