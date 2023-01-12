@@ -174,7 +174,7 @@ class ServerJob implements ShouldQueue
                     Log::error($e->getMessage());
 
                     $this->http->patch('/tasks/' . $task_id, [
-                        'title' => '创建服务器失败, 我们将撤销更改。',
+                        'title' => '此节点满载，已售罄。请尝试其他节点。',
                         'status' => 'failed',
                     ]);
 
