@@ -90,7 +90,7 @@ class HostController extends Controller
         // 或者执行 Functions/HostController.php 中的 destroy 方法。
 
         if ($host->status === 'pending') {
-            return false;
+            return $this->error('主机正在创建中，无法删除。');
         }
 
         $HostController = new Functions\HostController();
