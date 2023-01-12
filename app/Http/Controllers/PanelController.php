@@ -246,12 +246,12 @@ class PanelController extends Controller
 
     public function delete($url, $data = null)
     {
-        $response = $this->http->delete($this->url . $url, $data);
+        $response = $this->http->delete($this->url . $url, $data)->throw();
 
-        // if 404
-        if ($response->status() == 404) {
-            return true;
-        }
+        // // if 404
+        // if ($response->status() == 404) {
+        //     return true;
+        // }
 
         // $response->throw();
         // if ($response->failed()) {
