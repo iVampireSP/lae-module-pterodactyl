@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Remote\WorkOrder;
 
-use App\Http\Controllers\Controller;
-use App\Models\WorkOrder\WorkOrder;
+use App\Models\Host;
 use Illuminate\Http\Request;
+use App\Models\WorkOrder\WorkOrder;
+use App\Http\Controllers\Controller;
 
 class WorkOrderController extends Controller
 {
@@ -29,6 +30,9 @@ class WorkOrderController extends Controller
     {
 
         $req = $request->all();
+
+        $host = Host::where('host_id', $request->input('host_id'))->firstOrFail();
+        $req['host_id'] = $host->id;
 
         $workOrder = WorkOrder::create($req);
 
