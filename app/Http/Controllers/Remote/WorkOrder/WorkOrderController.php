@@ -30,11 +30,6 @@ class WorkOrderController extends Controller
     {
         $req = $request->all();
 
-        if ($request->filled('host_id')) {
-            $host = Host::where('host_id', $request->input('host_id'))->firstOrFail();
-            $req['host_id'] = $host->id;
-        }
-
         $workOrder = WorkOrder::create($req);
 
         return $this->success($workOrder);
