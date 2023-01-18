@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Jobs\RefreshNestJob;
 use App\Http\Controllers\JobController;
 use App\Jobs\CheckNode;
+use App\Jobs\RefreshHostJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -24,6 +25,7 @@ class Kernel extends ConsoleKernel
         })->hourly()->name('Wings');
 
         $schedule->job(new CheckNode())->everyMinute()->name('CheckNode');
+        $schedule->job(new RefreshHostJob())->everyTenMinutes()->name('RefreshHostJob');
 
         // run recount command every 5 minutes
         $schedule->command('recount')->everyFiveMinutes()->name('Recount location servers');
