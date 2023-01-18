@@ -44,6 +44,8 @@ class RefreshHostJob implements ShouldQueue
                 }
 
                 $suspended = $server['attributes']['suspended'];
+                $identifier = $server['attributes']['identifier'];
+                $host->identifier = $identifier;
 
                 if ($suspended) {
                     $host->status = 'suspended';
