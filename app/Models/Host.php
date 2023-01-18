@@ -153,7 +153,9 @@ class Host extends Model
             $model->price = $model->calcPrice();
 
             $http->patch('/hosts/' . $model->host_id, [
-                'price' => $model->price
+                'price' => $model->price,
+                'suspended_at' => $model->suspended_at,
+                'status' => $model->status,
             ]);
         });
 
