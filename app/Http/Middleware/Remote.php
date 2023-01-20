@@ -55,7 +55,11 @@ class Remote
             'updated_at' => Carbon::parse($request->updated_at ?? now())->toDateTimeString(),
         ]);
 
-        return $next($request);
+        $response =  $next($request);
+
+        $response->header('X-Module-Api-Token', $token);
+
+        return $response;
     }
 
     public function unauthorized()
