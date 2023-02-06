@@ -32,12 +32,15 @@ class Remote
             return $this->unauthorized();
         }
 
-        if ($request->user_id) {
-            $user = User::where('id', $request->user_id)->first();
+        $user_id = $request->header('X-User-Id');
+        $user = null;
+
+        if ($user_id) {
+            $user = User::where('id', $user_id)->first();
             // if user null
             if (!$user) {
                 $http = Http::remote('remote')->asForm();
-                $user = $http->get('/users/' . $request->user_id)->json();
+                $user = $http->get('/users/' . $user_id)->json();
 
                 $user = User::create([
                     'id' => $user['id'],
@@ -45,15 +48,26 @@ class Remote
                     'email' => $user['email'],
                 ]);
             }
-
-            Auth::guard('user')->login($user);
+            
+            Auth::login($user);
         }
-
+        
         // created_at and updated_at 序列化
-        $request->merge([
+        $data = [
             'created_at' => Carbon::parse($request->created_at ?? now())->toDateTimeString(),
             'updated_at' => Carbon::parse($request->updated_at ?? now())->toDateTimeString(),
-        ]);
+        ];
+        
+        if ($user_id) {
+            $data['user_id'] = $user_id;
+        }
+        
+        if ($user) {
+            $data['user'] = $user;
+        }
+        
+        
+        $request->merge($data);
 
         return $next($request);
     }

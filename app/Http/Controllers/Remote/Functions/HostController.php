@@ -32,8 +32,8 @@ class HostController extends Controller
             'egg_id' => 'required|integer',
             'location_id' => 'required|integer',
             'allocations' => 'required|integer|max:10|min:1',
-            'memory' => 'required|integer|min:128|max:40960',
-            'disk' => 'required|integer|min:512|max:40960',
+            'memory' => 'required|integer|min:128|max:65536',
+            'disk' => 'required|integer|min:512|max:65536',
             'cpu_limit' => 'required|integer|min:100|max:1200',
             'databases' => 'required|integer|max:5',
             'backups' => 'required|integer|max:50',
@@ -78,7 +78,7 @@ class HostController extends Controller
         // 预留主机位置
         $host = $this->http->post('/hosts', [
             'name' => $request->name, // 主机名称，如果为 null 则随机生成。
-            'user_id' => $request->user_id, // 给指定用户创建主机
+            'user_id' => auth()->id(), // 给指定用户创建主机
             'price' => 0.01, // 预留 0.01 用于验证用户的余额
             'status' => 'pending', // 初始状态
         ]);
@@ -143,13 +143,13 @@ class HostController extends Controller
 
         if ($request->has('memory')) {
             $request->validate([
-                'memory' => 'required|integer|min:1024|max:16384',
+                'memory' => 'required|integer|min:1024|max:65536',
             ]);
         }
 
         if ($request->has('disk')) {
             $request->validate([
-                'disk' => 'required|integer|min:512|max:40960',
+                'disk' => 'required|integer|min:512|max:65536',
             ]);
         }
 
