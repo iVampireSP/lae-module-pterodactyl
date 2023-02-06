@@ -5,15 +5,14 @@ namespace App\Jobs;
 use App\Models\Host;
 use Illuminate\Support\Arr;
 use App\Models\WingsNestEgg;
-use Illuminate\Http\Request;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Http\Controllers\PanelController;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class UpdateServerJob implements ShouldQueue
 {
@@ -36,8 +35,6 @@ class UpdateServerJob implements ShouldQueue
         $this->request = $request;
         $this->host_id = $host_id;
         $this->task_id = $task_id;
-
-
     }
 
     /**
@@ -64,6 +61,7 @@ class UpdateServerJob implements ShouldQueue
         $startup = [];
 
         // get current server
+        Log::debug("获取服务器信息", $host);
         $server = $panel->server($host->server_id);
 
         $update['allocation'] = $server['attributes']['allocation'];
@@ -100,12 +98,14 @@ class UpdateServerJob implements ShouldQueue
             $startup['egg'] = $egg->egg_id;
             $startup['image'] = $egg->docker_image;
 
+            Log::debug("lae task: 更新服务器启动设置", [$task_id]);
             $this->http->patch('/tasks/' . $task_id, [
                 'title' => '正在更新服务器启动配置...',
                 'status' => 'processing',
             ]);
 
 
+            Log::debug("更新服务器启动设置", $startup);
             $panel->updateServerStartup($host->server_id, $startup);
         }
 
@@ -145,6 +145,7 @@ class UpdateServerJob implements ShouldQueue
             $server_databases_count = count($server['attributes']['relationships']['databases']['data']);
 
             if ($request['databases'] < $server_databases_count) {
+                Log::debug("lae task: 数据库数量无法减少。除非您删除一些数据库。", [$task_id]);
                 return $this->http->patch('/tasks/' . $task_id, [
                     'title' => '数据库数量无法减少。除非您删除一些数据库。',
                     'status' => 'failed',
@@ -159,11 +160,13 @@ class UpdateServerJob implements ShouldQueue
             $update['feature_limits']['backups'] = $request['backups'];
         }
 
+        Log::debug("lae task: 正在更新服务器限制...", [$task_id]);
         $this->http->patch('/tasks/' . $task_id, [
             'title' => '正在更新服务器限制...',
             'status' => 'processing',
         ]);
 
+        Log::debug("更新服务器 build...", $update);
         $panel->updateServerBuild($host->server_id, $update);
 
         $host->update($request_only);
