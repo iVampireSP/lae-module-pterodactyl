@@ -61,7 +61,7 @@ class UpdateServerJob implements ShouldQueue
         $startup = [];
 
         // get current server
-        Log::debug("获取服务器信息", $host);
+        Log::debug("获取服务器信息", $host->toArray());
         $server = $panel->server($host->server_id);
 
         $update['allocation'] = $server['attributes']['allocation'];
