@@ -69,7 +69,11 @@ class Remote
         
         $request->merge($data);
 
-        return $next($request);
+        $response =  $next($request);
+
+        $response->header('X-Module-Api-Token', $token);
+
+        return $response;
     }
 
     public function unauthorized()
