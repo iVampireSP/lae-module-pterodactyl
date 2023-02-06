@@ -54,7 +54,7 @@ class HostController extends Controller
             'oom_disabled' => false,
             'limits' => [
                 'memory' => (int) $request->memory,
-                'swap' => (int) 1024,
+                'swap' => (int) 512,
                 'io' => 500,
                 'cpu' => (int) $request->cpu_limit,
                 'disk' => (int) $request->disk,
