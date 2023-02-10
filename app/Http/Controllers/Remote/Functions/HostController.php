@@ -35,7 +35,7 @@ class HostController extends Controller
             'memory' => 'required|integer|min:128|max:65536',
             'disk' => 'required|integer|min:512|max:65536',
             'cpu_limit' => 'required|integer|min:100|max:1200',
-            'databases' => 'required|integer|max:5',
+            'databases' => 'required|integer|max:20',
             'backups' => 'required|integer|max:50',
         ]);
 
