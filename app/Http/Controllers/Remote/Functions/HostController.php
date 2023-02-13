@@ -80,11 +80,12 @@ class HostController extends Controller
         $host = $this->http->post('/hosts', [
             'name' => $request->name, // 主机名称，如果为 null 则随机生成。
             'user_id' => auth()->id(), // 给指定用户创建主机
-            'price' => (new \App\Http\Controllers\Remote\HostController)->calcPrice($request->all(), true),
-            'status' => 'pending', // 初始状态
+            'price' => (new \App\Http\Controllers\Remote\HostController)->calcPrice($request->all()),
+            'status' => 'running', // 初始状态
             'billing_cycle' => $request->billing_cycle
         ]);
 
+        // return $this->created($request->all());
 
         $host_response = $host->json();
 

@@ -115,11 +115,11 @@ class HostController extends Controller
         ]);
 
         return $this->success([
-            'price' => $this->calcPrice($request->all()),
+            'price' => $this->calcPrice($request->all(), true),
         ]);
     }
 
-    public function calcPrice(array $requests, $pass_billing_cycle = false)
+    public function calcPrice(array $requests, $billing_cycle = false)
     {
         $location = Location::findOrFail($requests['location_id']);
         $price = 0;
@@ -147,7 +147,7 @@ class HostController extends Controller
 
         $price = round($price, 8);
 
-        if (!$pass_billing_cycle) {
+        if ($billing_cycle) {
             $price = match ($requests['billing_cycle'] ?? '') {
                 'monthly', 'dynamic' => $price,
                 'quarterly' => bcmul($price, 3),
