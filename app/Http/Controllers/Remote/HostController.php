@@ -119,7 +119,7 @@ class HostController extends Controller
         ]);
     }
 
-    public function calcPrice(array $requests)
+    public function calcPrice(array $requests, $pass_billing_cycle = false)
     {
         $location = Location::findOrFail($requests['location_id']);
         $price = 0;
@@ -147,15 +147,17 @@ class HostController extends Controller
 
         $price = round($price, 8);
 
-        $price = match ($requests['billing_cycle'] ?? '') {
-            'monthly', 'dynamic' => $price,
-            'quarterly' => bcmul($price, 3),
-            'semi-annually' => bcmul($price, 6),
-            'annually' => bcmul($price, 12),
-            'biennially' => bcmul($price, 24),
-            'triennially' => bcmul($price, 36),
-            default => $price,
-        };
+        if (!$pass_billing_cycle) {
+            $price = match ($requests['billing_cycle'] ?? '') {
+                'monthly', 'dynamic' => $price,
+                'quarterly' => bcmul($price, 3),
+                'semi-annually' => bcmul($price, 6),
+                'annually' => bcmul($price, 12),
+                'biennially' => bcmul($price, 24),
+                'triennially' => bcmul($price, 36),
+                default => $price,
+            };
+        }
 
 
         return $price;
