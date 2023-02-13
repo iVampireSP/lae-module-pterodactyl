@@ -72,7 +72,9 @@ class HostController extends Controller
                 break;
 
             case 'error':
-                $host->update($request->all());
+                $host->update([
+                    'status' => 'error',
+                ]);
 
                 break;
         }
