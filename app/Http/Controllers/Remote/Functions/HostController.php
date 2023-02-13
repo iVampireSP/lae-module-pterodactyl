@@ -37,6 +37,7 @@ class HostController extends Controller
             'cpu_limit' => 'required|integer|min:100|max:1200',
             'databases' => 'required|integer|max:20',
             'backups' => 'required|integer|max:50',
+            'billing_cycle' => 'nullable|string',
         ]);
 
         $location = Location::findOrFail($request->location_id);
@@ -81,6 +82,7 @@ class HostController extends Controller
             'user_id' => auth()->id(), // 给指定用户创建主机
             'price' => 0.01, // 预留 0.01 用于验证用户的余额
             'status' => 'pending', // 初始状态
+            'billing_cycle' => $request->billing_cycle
         ]);
 
 
