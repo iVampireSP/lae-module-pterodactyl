@@ -35,6 +35,7 @@ Route::group(['prefix' => '/functions', 'as' => 'functions.'], function () {
     Route::get('nests', [Functions\NestController::class, 'nests']);
     Route::get('locations', Functions\LocationController::class);
     Route::patch('account', [Functions\AccountController::class, 'update']);
+    Route::match(['get', 'post'], 'calculate', [App\Http\Controllers\Remote\HostController::class, 'calc']);
 
     // 匹配所有
     Route::get('hosts/{host}/server', [Functions\HostController::class, 'server_detail']);
