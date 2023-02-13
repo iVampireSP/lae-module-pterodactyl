@@ -80,7 +80,7 @@ class HostController extends Controller
         $host = $this->http->post('/hosts', [
             'name' => $request->name, // 主机名称，如果为 null 则随机生成。
             'user_id' => auth()->id(), // 给指定用户创建主机
-            'price' => 0.01, // 预留 0.01 用于验证用户的余额
+            'price' => (new \App\Http\Controllers\Remote\HostController)->calcPrice($request->all()),
             'status' => 'pending', // 初始状态
             'billing_cycle' => $request->billing_cycle
         ]);
