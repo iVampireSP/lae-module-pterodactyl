@@ -37,7 +37,7 @@ class HostController extends Controller
             'cpu_limit' => 'required|integer|min:100|max:1200',
             'databases' => 'required|integer|max:20',
             'backups' => 'required|integer|max:50',
-            'billing_cycle' => 'nullable|string',
+            'billing_cycle' => 'nullable|string|in:hourly,monthly',
         ]);
 
         $location = Location::findOrFail($request->location_id);
