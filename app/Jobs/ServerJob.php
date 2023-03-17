@@ -166,6 +166,8 @@ class ServerJob implements ShouldQueue
                     'title' => '创建您的服务器中。',
                 ]);
 
+                $data['external_id'] = $host_id;
+
                 try {
                     $result = $panel->createServer($data);
 
