@@ -40,6 +40,15 @@ class UpdateID extends Command
 
                 $this->info('Identifier: ' . $identifier);
                 $host->identifier = $identifier;
+
+
+                $panel->updateServerDetails(
+                    $host->server_id,
+                    [
+                        'external_id' => $host->host_id,
+                    ]
+                );
+
                 $host->save();
             }
         });
