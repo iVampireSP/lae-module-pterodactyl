@@ -42,12 +42,12 @@ class UpdateID extends Command
                 $host->identifier = $identifier;
 
 
-                $panel->updateServerDetails(
-                    $host->server_id,
-                    [
-                        'external_id' => $host->host_id,
-                    ]
-                );
+                // $panel->updateServerDetails(
+                //     $host->server_id,
+                //     [
+                //         'external_id' => $host->host_id ?? $host->id,
+                //     ]
+                // );
 
                 $host->save();
             }
